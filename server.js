@@ -35,6 +35,7 @@ const TYPES = {
 const RAHASIA = new Set(["server.js", "store.js", "page.js", "build-docs.js", "package.json", "railway.json"]);
 
 let page = buildPage(ROOT);
+const pageEtag = '"' + require("crypto").createHash("sha1").update(page).digest("hex").slice(0, 16) + '"';
 
 /* ---------- utilitas ---------- */
 
@@ -232,13 +233,31 @@ async function checkin(req, res) {
 
 /* ---------- berkas statis ---------- */
 
-function berkas(res, url) {
+function berkas(req, res, url) {
   const aman = path.normalize(url).replace(/^(\.\.[/\\])+/, "");
   const file = path.join(ROOT, aman);
   if (!file.startsWith(ROOT) || RAHASIA.has(path.basename(file))) return false;
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return false;
+
+  const st = fs.statSync(file);
+  /* Aset dipakai dengan nama tetap (hio-chery-q.jpg dan kawan-kawan), jadi
+     nama berkas tidak bisa jadi penanda versi. ETag dari ukuran + waktu ubah
+     membuat browser bertanya dulu sebelum memakai salinan lamanya: foto yang
+     diganti langsung terlihat, tanpa peserta perlu menghapus cache. */
+  const etag = '"' + st.size.toString(16) + "-" + Math.floor(st.mtimeMs).toString(16) + '"';
+  if (req.headers["if-none-match"] === etag) {
+    res.writeHead(304, { etag: etag, "cache-control": "public, max-age=300, must-revalidate" });
+    return res.end(), true;
+  }
+
   const type = TYPES[path.extname(file).toLowerCase()] || "application/octet-stream";
-  res.writeHead(200, { "content-type": type, "cache-control": "public, max-age=86400" });
+  res.writeHead(200, {
+    "content-type": type,
+    "content-length": st.size,
+    etag: etag,
+    "last-modified": st.mtime.toUTCString(),
+    "cache-control": "public, max-age=300, must-revalidate"
+  });
   fs.createReadStream(file).pipe(res);
   return true;
 }
@@ -279,9 +298,16 @@ const server = http.createServer(function (req, res) {
 
   /* halaman utama + aset */
   if (jalur === "/" || jalur === "/index.html") {
-    return kirim(res, 200, TYPES[".html"], page, { "cache-control": "public, max-age=60" });
+    if (req.headers["if-none-match"] === pageEtag) {
+      res.writeHead(304, { etag: pageEtag, "cache-control": "public, max-age=60, must-revalidate" });
+      return res.end();
+    }
+    return kirim(res, 200, TYPES[".html"], page, {
+      etag: pageEtag,
+      "cache-control": "public, max-age=60, must-revalidate"
+    });
   }
-  if (berkas(res, jalur)) return;
+  if (berkas(req, res, jalur)) return;
 
   res.writeHead(404, { "content-type": TYPES[".html"] });
   res.end(page);

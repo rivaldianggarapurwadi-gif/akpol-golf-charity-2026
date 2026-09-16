@@ -97,16 +97,24 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 
 .eyebrow{
   display:inline-flex;align-items:center;gap:var(--spacing-8);
-  font-size:var(--text-caption);font-weight:500;line-height:var(--leading-caption);
-  letter-spacing:var(--tracking-caption);text-transform:uppercase;color:var(--color-navy);
-  margin-bottom:var(--spacing-12);
+  font-size:13.5px;font-weight:600;line-height:1.4;
+  letter-spacing:1.1px;text-transform:uppercase;color:var(--color-navy);
+  background:var(--navy-wash);border:1px solid rgba(7,42,92,.14);
+  border-radius:var(--radius-tags);padding:7px var(--spacing-12);
+  margin-bottom:var(--spacing-16);
+  align-self:flex-start;
 }
-.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--color-gold);flex:none}
-.eyebrow--light{color:rgba(255,255,255,.85)}
-.eyebrow--light::before{background:rgba(255,255,255,.7)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--color-gold);flex:none;
+  box-shadow:0 0 0 3px rgba(250,179,18,.22)}
+/* Di kartu ber-wash navy, lencana dibalik jadi putih supaya tetap menonjol. */
+.card--mint .eyebrow,.tier--title .eyebrow{background:var(--color-paper-white);border-color:rgba(7,42,92,.12)}
+/* Di hero yang gelap, lencana memakai kaca putih tipis. */
+.eyebrow--light{color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28)}
+.eyebrow--light::before{background:var(--color-gold);box-shadow:0 0 0 3px rgba(250,179,18,.28)}
 
 .section-head{max-width:640px;margin-inline:auto;text-align:center;margin-bottom:var(--spacing-48)}
 .section-head .lede{margin:var(--spacing-16) auto 0}
+.section-head .eyebrow{margin-bottom:var(--spacing-16);align-self:center}
 .section-head--left{margin-inline:0;text-align:left}
 .section-head--left .lede{margin-inline:0}
 

@@ -303,6 +303,14 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 @media (max-width:820px){.venue__actions{justify-content:flex-start}}
 
 /* ===== logo wall ===== */
+.hadiah--4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1000px){.hadiah--4{grid-template-columns:repeat(2,1fr)}}
+.piala{display:grid;grid-template-columns:240px 1fr;gap:clamp(20px,3vw,40px);align-items:center;
+  border:1px solid var(--color-mist-gray);border-radius:var(--radius-largecontainers);
+  padding:clamp(20px,3vw,32px);margin-top:var(--spacing-24)}
+@media (max-width:760px){.piala{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.piala img{width:100%;max-width:240px;height:auto;display:block;border-radius:var(--radius-cards);background:var(--color-mist-gray)}
+.piala__teks .list{margin-top:var(--spacing-16)}
 .hadiah{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--spacing-16);margin-top:var(--spacing-24)}
 @media (max-width:1000px){.hadiah{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:640px){.hadiah{grid-template-columns:repeat(2,1fr)}}
@@ -654,16 +662,47 @@ html{scroll-behavior:smooth}
       <p class="lede">Hadiah pertandingan untuk para pemenang, dan lucky draw untuk seluruh peserta yang hadir sampai closing dinner.</p>
     </div>
 
-    <div class="grid grid--2">
-      <div class="card">
+    <div class="sub-head" style="margin-top:0">
+      <span class="eyebrow">Hadiah pertandingan</span>
+      <h3 style="font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm)">Trofi taruna dan uang tunai</h3>
+    </div>
+
+    <div class="piala">
+      <img src="piala-best-net.jpg" alt="Trofi Best Net Overall — figur taruna Akpol di atas alas hitam" width="512" height="1024" loading="lazy">
+      <div class="piala__teks">
         <span class="tag tag--mint">Dikonfirmasi</span>
-        <h3>Hadiah pertandingan</h3>
-        <p>Trofi dan uang tunai untuk pemenang. Kategori dan jumlah hadiah mengikuti keputusan panitia bersama pengelola lapangan.</p>
+        <h3 style="margin-top:var(--spacing-12)">Trofi khusus Akpol Golf Charity</h3>
+        <p class="lede" style="font-size:15px;margin-top:var(--spacing-8)">Trofi figur taruna Akademi Kepolisian dengan lambang Akpol dan logo acara pada alasnya, ditambah uang tunai untuk para pemenang.</p>
+        <ul class="list" style="font-size:15px">
+          <li>Best Net Overall dan kategori lain yang ditetapkan panitia</li>
+          <li>Uang tunai menyertai trofi</li>
+          <li>Diserahkan pada closing dinner</li>
+        </ul>
       </div>
-      <div class="card">
-        <span class="tag">Detail menyusul</span>
-        <h3>Hadiah Hole in One</h3>
-        <p>Hadiah untuk hole in one disiapkan panitia; hole yang dilombakan dan bentuk hadiahnya belum final.</p>
+    </div>
+
+    <div class="sub-head">
+      <span class="eyebrow">Hole in One</span>
+      <h3 style="font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm)">Empat unit mobil menunggu satu pukulan</h3>
+      <p class="caption" style="margin-top:var(--spacing-8)">Hole yang dilombakan dan ketentuan klaimnya ditetapkan panitia bersama pengelola lapangan.</p>
+    </div>
+
+    <div class="hadiah hadiah--4">
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hio-byd-atto-1.jpg" alt="BYD ATTO 1" width="728" height="410" loading="lazy">
+        <div class="hadiah__nama">BYD ATTO 1</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hio-jaecoo-j5.jpg" alt="JAECOO J5" width="1568" height="882" loading="lazy">
+        <div class="hadiah__nama">JAECOO J5</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hio-wuling-air-ev.jpg" alt="Wuling Air EV" width="1260" height="794" loading="lazy">
+        <div class="hadiah__nama">Wuling Air EV</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hio-chery-q.jpg" alt="Chery Q" width="1536" height="1024" loading="lazy">
+        <div class="hadiah__nama">Chery Q</div>
       </div>
     </div>
 

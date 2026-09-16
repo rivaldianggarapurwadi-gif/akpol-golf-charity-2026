@@ -303,6 +303,17 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 @media (max-width:820px){.venue__actions{justify-content:flex-start}}
 
 /* ===== logo wall ===== */
+.hadiah{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--spacing-16);margin-top:var(--spacing-24)}
+@media (max-width:1000px){.hadiah{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.hadiah{grid-template-columns:repeat(2,1fr)}}
+.hadiah__item{border:1px solid var(--color-mist-gray);border-radius:var(--radius-cards);overflow:hidden;background:var(--color-paper-white)}
+.hadiah__item:hover{border-color:var(--color-cloud-gray)}
+.hadiah__foto{aspect-ratio:1/1;width:100%;height:auto;max-width:100%;display:block;object-fit:contain;background:var(--color-paper-white);padding:var(--spacing-8)}
+.hadiah__kosong{aspect-ratio:1/1;width:100%;display:grid;place-items:center;background:var(--color-mist-gray);
+  font-size:var(--text-caption);color:var(--text-muted);letter-spacing:var(--tracking-caption);text-align:center;padding:var(--spacing-12)}
+.hadiah__nama{font-size:14px;font-weight:500;line-height:1.35;padding:var(--spacing-12) var(--spacing-12) var(--spacing-16);
+  border-top:1px solid var(--color-mist-gray)}
+.sub-head{margin-top:clamp(40px,5vw,64px);max-width:640px;margin-inline:auto;text-align:center}
 .logos{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-24);margin-top:var(--spacing-48)}
 @media (max-width:820px){.logos{grid-template-columns:repeat(2,1fr)}}
 .logo-tile{height:64px;display:grid;place-items:center;background:var(--color-mist-gray);border-radius:var(--radius-buttons);
@@ -640,23 +651,14 @@ html{scroll-behavior:smooth}
     <div class="section-head">
       <span class="eyebrow">Hadiah &amp; lucky draw</span>
       <h2>Yang diperebutkan</h2>
-      <p class="lede">Panitia menandai mana yang sudah pasti dan mana yang masih dalam perencanaan.</p>
+      <p class="lede">Hadiah pertandingan untuk para pemenang, dan lucky draw untuk seluruh peserta yang hadir sampai closing dinner.</p>
     </div>
+
     <div class="grid grid--2">
       <div class="card">
         <span class="tag tag--mint">Dikonfirmasi</span>
-        <h3>Trofi dan uang tunai</h3>
-        <p>Untuk pemenang pertandingan. Kategori dan jumlah hadiah mengikuti keputusan panitia bersama pengelola lapangan.</p>
-      </div>
-      <div class="card">
-        <span class="tag tag--mint">Dikonfirmasi</span>
-        <h3>Kupon lucky draw</h3>
-        <p>Setiap peserta menerima kupon lucky draw di dalam perlengkapan peserta. Pengundian dilakukan saat closing dinner.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Rencana</span>
-        <h3>Grand prize: motor listrik Tangkas</h3>
-        <p>Direncanakan sebagai grand prize lucky draw, dikonfirmasi ulang menjelang hari pelaksanaan.</p>
+        <h3>Hadiah pertandingan</h3>
+        <p>Trofi dan uang tunai untuk pemenang. Kategori dan jumlah hadiah mengikuti keputusan panitia bersama pengelola lapangan.</p>
       </div>
       <div class="card">
         <span class="tag">Detail menyusul</span>
@@ -664,6 +666,57 @@ html{scroll-behavior:smooth}
         <p>Hadiah untuk hole in one disiapkan panitia; hole yang dilombakan dan bentuk hadiahnya belum final.</p>
       </div>
     </div>
+
+    <div class="sub-head">
+      <span class="eyebrow">Lucky draw</span>
+      <h3 style="font-size:var(--text-heading-sm);letter-spacing:var(--tracking-heading-sm)">Sepuluh hadiah, satu kupon untuk setiap peserta</h3>
+      <p class="caption" style="margin-top:var(--spacing-8)">Kupon lucky draw ada di dalam perlengkapan peserta. Pengundian dilakukan saat closing dinner.</p>
+    </div>
+
+    <div class="hadiah">
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hadiah-golf-bag.jpg" alt="Golf bag" width="800" height="800" loading="lazy">
+        <div class="hadiah__nama">Golf bag</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hadiah-travel-bag.jpg" alt="Travel bag" width="800" height="800" loading="lazy">
+        <div class="hadiah__nama">Travel bag</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hadiah-putter.jpg" alt="Putter stick" width="800" height="800" loading="lazy">
+        <div class="hadiah__nama">Putter stick</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hadiah-smartwatch.jpg" alt="Smartwatch golf" width="800" height="800" loading="lazy">
+        <div class="hadiah__nama">Smartwatch</div>
+      </div>
+      <div class="hadiah__item">
+        <img class="hadiah__foto" src="hadiah-golf-pouch.jpg" alt="Golf pouch" width="800" height="800" loading="lazy">
+        <div class="hadiah__nama">Golf pouch</div>
+      </div>
+      <div class="hadiah__item">
+        <div class="hadiah__kosong">Foto menyusul</div>
+        <div class="hadiah__nama">TV Samsung 50 inci</div>
+      </div>
+      <div class="hadiah__item">
+        <div class="hadiah__kosong">Foto menyusul</div>
+        <div class="hadiah__nama">Kulkas Samsung</div>
+      </div>
+      <div class="hadiah__item">
+        <div class="hadiah__kosong">Foto menyusul</div>
+        <div class="hadiah__nama">Duffle bag</div>
+      </div>
+      <div class="hadiah__item">
+        <div class="hadiah__kosong">Foto menyusul</div>
+        <div class="hadiah__nama">Range tracker</div>
+      </div>
+      <div class="hadiah__item">
+        <div class="hadiah__kosong">Foto menyusul</div>
+        <div class="hadiah__nama">Bola golf</div>
+      </div>
+    </div>
+
+    <p class="caption" style="margin-top:var(--spacing-16)">Foto bersifat ilustrasi. Merek dan tipe final setiap hadiah ditetapkan panitia.</p>
   </div>
 </section>
 

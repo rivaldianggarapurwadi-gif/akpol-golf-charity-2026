@@ -341,6 +341,15 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 @media (max-width:720px){.receipt__grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:460px){.receipt__grid{grid-template-columns:1fr}}
 .receipt__actions{display:flex;flex-wrap:wrap;gap:var(--spacing-8);margin-top:var(--spacing-24)}
+.panel-cek{border:1px solid var(--color-mist-gray);border-radius:var(--radius-cards);padding:var(--spacing-24);
+  display:grid;grid-template-columns:1fr auto;gap:var(--spacing-16) var(--spacing-24);align-items:center;margin-bottom:var(--spacing-24)}
+@media (max-width:720px){.panel-cek{grid-template-columns:1fr}}
+.cek-form{display:flex;gap:var(--spacing-8);align-items:center}
+.cek-form input{font:500 15px/1.5 var(--font-inter);letter-spacing:.04em;text-transform:uppercase;color:var(--color-body);
+  background:var(--color-paper-white);border:1px solid var(--color-cloud-gray);border-radius:var(--radius-inputs);
+  padding:10px var(--spacing-12);width:190px;max-width:100%}
+.cek-form input:focus{outline:2px solid var(--color-navy);border-color:var(--color-navy)}
+#cekHasil{grid-column:1 / -1}
 .status-bar{display:flex;flex-wrap:wrap;gap:var(--spacing-16);align-items:center;justify-content:space-between;
   background:var(--color-mist-gray);border-radius:var(--radius-cards);padding:var(--spacing-16) var(--spacing-24);margin-bottom:var(--spacing-24)}
 .status-bar__code{font-size:var(--text-subheading);font-weight:600;letter-spacing:.02em;font-variant-numeric:tabular-nums}
@@ -689,6 +698,19 @@ html{scroll-behavior:smooth}
       <div class="step"><span class="step__n">05</span><span class="step__t">Verifikasi</span><span class="step__d">Panitia cek bukti bayar</span></div>
       <div class="step"><span class="step__n">06</span><span class="step__t">E-ticket</span><span class="step__d">QR untuk check-in</span></div>
       <div class="step"><span class="step__n">07</span><span class="step__t">Check-in</span><span class="step__d">10.00 WIB di lokasi</span></div>
+    </div>
+
+    <div class="panel-cek">
+      <div>
+        <h4 style="font-size:var(--text-subheading);line-height:1.3">Sudah pernah mendaftar?</h4>
+        <p class="caption" style="margin-top:var(--spacing-4)">Masukkan kode pendaftaran Anda untuk melihat status verifikasi terbaru dari panitia.</p>
+      </div>
+      <form id="formCek" class="cek-form">
+        <label for="cekKode" class="caption" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Kode pendaftaran</label>
+        <input id="cekKode" type="text" placeholder="AGC26-XXXXX" autocomplete="off" spellcheck="false">
+        <button class="btn btn--outline btn--sm" type="submit">Cek status</button>
+      </form>
+      <p class="caption" id="cekHasil" hidden></p>
     </div>
 
     <div class="status-bar" id="statusBar" hidden>
@@ -1058,6 +1080,48 @@ var HERO_PHOTO_CREDIT = "";
     return "AGC26-" + out;
   }
 
+  /* ---------- API pendaftaran ----------
+     Halaman ini juga dipublikasikan sebagai Artifact tanpa server. Kalau API
+     tidak ada, alur lama tetap jalan: kode dibuat di sisi klien dan peserta
+     mengirim ringkasannya ke panitia lewat WhatsApp. */
+  var API = { ada: null };
+
+  function apiKirim(muatan) {
+    return fetch("/api/daftar", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(muatan)
+    }).then(function (r) {
+      if (r.status === 404 || !(r.headers.get("content-type") || "").includes("application/json")) {
+        throw new Error("tanpa-server");
+      }
+      return r.json().then(function (j) {
+        return { status: r.status, ok: r.ok, data: j };
+      });
+    });
+  }
+
+  function apiStatus(kode) {
+    return fetch("/api/status?kode=" + encodeURIComponent(kode)).then(function (r) {
+      if (!(r.headers.get("content-type") || "").includes("application/json")) {
+        throw new Error("tanpa-server");
+      }
+      return r.json().then(function (j) { return { ok: r.ok, data: j }; });
+    });
+  }
+
+  /* Sisa kursi ditampilkan di hero kalau servernya menjawab. */
+  fetch("/api/kuota").then(function (r) { return r.ok ? r.json() : null; }).then(function (k) {
+    if (!k) return;
+    API.ada = true;
+    var n = document.querySelector(".hero__note");
+    if (n) {
+      n.textContent = k.sisa > 0
+        ? "Sisa " + k.sisa + " dari " + k.total + " kursi · pembayaran dan konfirmasi dilakukan bersama panitia"
+        : "Kuota " + k.total + " peserta sudah penuh · hubungi panitia untuk daftar tunggu";
+    }
+  }).catch(function () { API.ada = false; });
+
   function simpan(d) { try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch (e) {} }
   function baca() {
     try { var raw = localStorage.getItem(STORE_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
@@ -1100,12 +1164,16 @@ var HERO_PHOTO_CREDIT = "";
     box.innerHTML =
       '<div class="receipt">' +
         '<div style="display:flex;flex-wrap:wrap;gap:var(--spacing-12);align-items:center;justify-content:space-between">' +
-          '<span class="tag">Belum terverifikasi</span>' +
-          '<span class="caption">Disimpan di perangkat ini</span>' +
+          '<span class="tag">' + (d.status_server === "terverifikasi" ? "Terverifikasi" : "Menunggu verifikasi pembayaran") + '</span>' +
+          '<span class="caption">' + (d.tersimpan ? "Tercatat di daftar panitia" : "Tersimpan di perangkat ini — kirim ke panitia agar tercatat") + '</span>' +
         '</div>' +
         '<div class="caption" style="margin-top:var(--spacing-16)">Kode pendaftaran</div>' +
         '<div class="receipt__code">' + esc(d.kode) + '</div>' +
-        '<p class="lede" style="font-size:15px;margin-top:var(--spacing-12)">Simpan kode ini, lalu kirim ringkasan di bawah ke panitia untuk menerima instruksi pembayaran. Pendaftaran sah setelah pembayaran diverifikasi dan e-ticket dikirim.</p>' +
+        '<p class="lede" style="font-size:15px;margin-top:var(--spacing-12)">' +
+          (d.tersimpan
+            ? "Pendaftaran Anda sudah masuk ke daftar panitia. Simpan kode ini — panitia menghubungi Anda lewat WhatsApp dengan instruksi pembayaran, dan kode ini dipakai untuk cek status serta check-in di lokasi."
+            : "Simpan kode ini, lalu kirim ringkasan di bawah ke panitia untuk menerima instruksi pembayaran. Pendaftaran sah setelah pembayaran diverifikasi.") +
+        '</p>' +
         '<div class="receipt__grid">' +
           kv("Nama", d.nama) + kv("Kategori", LABEL[d.kategori]) + kv("Tarif", TARIF[d.kategori]) +
           kv("Ukuran jersey", d.jersey) + kv("Handicap", d.handicap) + kv("Kontak", "+" + d.wa + " · " + d.email) +
@@ -1166,7 +1234,7 @@ var HERO_PHOTO_CREDIT = "";
     }
 
     var data = {
-      kode: buatKode(),
+      kode: "",
       kategori: kategori.value,
       kode_undangan: needsCode ? kodeInput.value.trim() : "",
       nama: nama.value.trim(),
@@ -1180,10 +1248,59 @@ var HERO_PHOTO_CREDIT = "";
       dibuat: new Date().toISOString()
     };
 
-    simpan(data);
-    form.hidden = true;
-    tampilkanRingkasan(data, true);
-    renderStatus();
+    var tombol = form.querySelector('button[type="submit"]');
+    tombol.disabled = true;
+    tombol.textContent = "Mengirim…";
+
+    var selesai = function () {
+      tombol.disabled = false;
+      tombol.textContent = "Kirim pendaftaran";
+    };
+
+    var lanjut = function () {
+      simpan(data);
+      form.hidden = true;
+      tampilkanRingkasan(data, true);
+      renderStatus();
+      selesai();
+    };
+
+    apiKirim({
+      kategori: data.kategori,
+      kode_undangan: data.kode_undangan,
+      nama: data.nama,
+      wa: data.wa,
+      email: data.email,
+      instansi: data.instansi,
+      jersey: data.jersey,
+      handicap: data.handicap,
+      catatan: data.catatan,
+      setuju: true
+    }).then(function (r) {
+      if (r.status === 201 && r.data.peserta) {
+        data.kode = r.data.peserta.kode;
+        data.status_server = r.data.peserta.status;
+        data.tersimpan = true;
+        if (typeof r.data.sisa === "number") {
+          var n = document.querySelector(".hero__note");
+          if (n) n.textContent = "Sisa " + r.data.sisa + " kursi · pembayaran dan konfirmasi dilakukan bersama panitia";
+        }
+        return lanjut();
+      }
+      /* Server menjawab tapi menolak: tampilkan alasannya di formulir. */
+      selesai();
+      var pesan = r.data && r.data.error ? r.data.error : "Pendaftaran gagal dikirim. Coba lagi.";
+      if (r.status === 409 && r.data.peserta && r.data.peserta.kode) {
+        pesan += " Kode pendaftaran Anda: " + r.data.peserta.kode + ".";
+      }
+      setErr(null, "e-setuju", pesan);
+      $("e-setuju").scrollIntoView({ behavior: "smooth", block: "center" });
+    }).catch(function () {
+      /* Tidak ada server (mis. versi Artifact): pakai alur lokal + WhatsApp. */
+      data.kode = buatKode();
+      data.tersimpan = false;
+      lanjut();
+    });
   });
 
   /* ---------- status lokal ---------- */
@@ -1206,5 +1323,33 @@ var HERO_PHOTO_CREDIT = "";
     renderStatus();
   });
   renderStatus();
+
+  /* ---------- cek status pendaftaran ---------- */
+  $("formCek").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var kode = $("cekKode").value.trim().toUpperCase();
+    var hasil = $("cekHasil");
+    if (!kode) return;
+    hasil.hidden = false;
+    hasil.textContent = "Memeriksa…";
+
+    apiStatus(kode).then(function (r) {
+      if (r.ok && r.data.peserta) {
+        var p = r.data.peserta;
+        var teks = p.kode + " · " + p.nama + " · " + p.kategoriLabel + " · jersey " + p.jersey + " — ";
+        if (p.status === "terverifikasi") teks += p.checkin ? "terverifikasi, sudah check-in." : "pembayaran terverifikasi. Tunjukkan kode ini saat check-in.";
+        else if (p.status === "batal") teks += "pendaftaran dibatalkan. Hubungi panitia bila ini keliru.";
+        else teks += "menunggu verifikasi pembayaran oleh panitia.";
+        hasil.textContent = teks;
+      } else {
+        hasil.textContent = (r.data && r.data.error) || "Kode pendaftaran tidak ditemukan.";
+      }
+    }).catch(function () {
+      var d = baca();
+      hasil.textContent = d && d.kode === kode
+        ? d.kode + " · " + d.nama + " — " + d.status + " (data dari perangkat ini; status resmi ada pada panitia)."
+        : "Status daring tidak tersedia di versi halaman ini. Hubungi panitia dengan menyertakan kode pendaftaran Anda.";
+    });
+  });
 })();
 </script>

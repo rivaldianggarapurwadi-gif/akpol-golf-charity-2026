@@ -4,14 +4,49 @@ Situs acara dan pendaftaran peserta. Satu halaman statis, tanpa dependency.
 
 ```
 index.html      halaman (sumber tunggal; juga dipublikasikan sebagai Artifact)
+panitia.html    halaman panitia: daftar pendaftar, verifikasi, check-in, ekspor
+hero.jpg        foto latar hero
 logo-mark.png   logo (mark) — navbar & kartu peserta
 logo-full.png   logo lockup penuh — footer
+akpol-crest.png lambang Akademi Kepolisian — footer & kontak
 page.js         pembungkus: index.html -> dokumen HTML utuh (dipakai server & build)
-server.js       server statis Node (Railway, atau lokal)
-build-docs.js   menulis hasil build ke /docs di root repo (GitHub Pages)
+server.js       server + API pendaftaran
+store.js        penyimpanan pendaftaran (berkas JSON, tulis atomik)
+build-docs.js   menulis hasil build ke /docs (versi statis, tanpa pendaftaran)
 package.json    npm start / npm run build:docs
 railway.json    konfigurasi deploy Railway
 ```
+
+## Pendaftaran
+
+Formulir di halaman mengirim data ke API dan pendaftaran langsung tercatat:
+
+| Endpoint | Untuk |
+| --- | --- |
+| `POST /api/daftar` | pendaftaran peserta — validasi, cek kuota, cek duplikat, terbitkan kode |
+| `GET /api/status?kode=` | peserta mengecek status pendaftarannya |
+| `GET /api/kuota` | sisa kursi (ditampilkan di hero) |
+| `GET /api/panitia/peserta` | daftar lengkap + rekap (butuh token) |
+| `POST /api/panitia/status` | ubah status: `menunggu` / `terverifikasi` / `batal` |
+| `POST /api/panitia/checkin` | tandai check-in di lokasi |
+| `GET /api/panitia/ekspor.csv` | ekspor seluruh data peserta |
+
+Kode pendaftaran diterbitkan server (`AGC26-XXXXX`), kuota dijaga di server, dan
+nomor WhatsApp atau email yang sama ditolak sebagai duplikat.
+
+**Versi statis** (`/docs`, GitHub Pages, atau Artifact) tidak punya API. Di sana
+formulir otomatis kembali ke alur lama: kode dibuat di perangkat peserta dan
+ringkasannya dikirim ke panitia lewat WhatsApp. Halaman menyebutkan bedanya
+secara terbuka, jadi peserta tidak mengira dirinya sudah tercatat.
+
+## Halaman panitia
+
+Buka `/panitia`, masuk dengan token dari `ADMIN_TOKEN`. Isinya: sisa kuota,
+jumlah menunggu/terverifikasi/check-in, rekap ukuran jersey, pencarian dan
+penyaringan, tombol verifikasi/batal/check-in per peserta, dan ekspor CSV.
+
+Selama `ADMIN_TOKEN` belum diatur, seluruh endpoint panitia menjawab 503 —
+halaman itu tidak pernah terbuka tanpa token.
 
 `index.html` ditulis sebagai fragment Artifact — tanpa `<!doctype>`, `<head>`,
 atau `<body>`. `page.js` yang menambahkannya, dipakai baik oleh server maupun
@@ -22,8 +57,17 @@ ikut diperbarui.
 ## Jalankan lokal
 
 ```bash
-node server.js       # http://localhost:3000
+ADMIN_TOKEN=rahasia node server.js    # http://localhost:3000, panitia di /panitia
 ```
+
+### Environment
+
+| Variabel | Arti |
+| --- | --- |
+| `PORT` | disuntik host. Default 3000. |
+| `ADMIN_TOKEN` | **wajib** agar halaman panitia bisa dipakai. Pakai nilai acak yang panjang. |
+| `DATA_DIR` | lokasi berkas data. **Arahkan ke volume** di Railway, kalau tidak data pendaftaran hilang setiap deploy. |
+| `KUOTA_PESERTA` | default 120. |
 
 ## Pilihan hosting
 
@@ -51,10 +95,14 @@ Isi `/docs` di root repo sudah siap saji (`npm run build:docs` untuk memperbarui
    `rivaldianggarapurwadi-gif/akpol-golf-charity-2026`.
 2. Tidak ada yang perlu dikonfigurasi. Situs ini ada di root repo, jadi
    **Root Directory dibiarkan kosong** dan branch-nya `main`.
-3. **Settings → Networking → Generate Domain**. Railway memberi URL
+3. **Settings → Variables**: isi `ADMIN_TOKEN` (nilai acak panjang) dan
+   `DATA_DIR=/data`.
+4. **Settings → Volumes**: pasang volume dengan mount path `/data`. Tanpa ini
+   data pendaftaran hilang setiap kali deploy ulang.
+5. **Settings → Networking → Generate Domain**. Railway memberi URL
    `*.up.railway.app` yang bisa dibuka kapan saja.
-4. Tidak ada environment variable yang perlu diisi. Railway menyuntikkan `PORT`
-   sendiri; health check ada di `/healthz`.
+
+Health check ada di `/healthz`; `PORT` disuntik Railway sendiri.
 
 Setiap push ke branch tersebut otomatis men-deploy ulang.
 

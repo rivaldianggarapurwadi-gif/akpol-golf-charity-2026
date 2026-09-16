@@ -160,6 +160,21 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
   .nav__toggle{display:inline-block}
   .nav__panel[data-open="true"]{display:block}
 }
+/* Di layar sempit slogan di navbar disembunyikan supaya tombol Daftar dan
+   Menu tetap muat dalam satu baris — slogannya tetap tampil di hero. */
+.lbl-short{display:none}
+@media (max-width:620px){
+  .brand__text span{display:none}
+  .brand{min-width:0;gap:var(--spacing-6)}
+  .brand__mark{height:32px}
+  .brand__text{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav__inner{gap:var(--spacing-8)}
+  .nav__actions{gap:var(--spacing-6);flex:none}
+  .lbl-long{display:none}
+  .lbl-short{display:inline}
+  .nav .btn--sm{padding:var(--spacing-8) var(--spacing-10);font-size:13.5px}
+  .nav__toggle{padding:8px 10px;font-size:13.5px}
+}
 
 /* ===== hero ===== */
 .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--hero-sky-top),var(--hero-sky-bottom));color:#fff;isolation:isolate}
@@ -361,7 +376,7 @@ html{scroll-behavior:smooth}
     <div class="nav__inner">
       <a class="brand" href="#top">
         <img class="brand__mark" src="logo-mark.png" alt="Logo Akpol Golf Charity" width="260" height="352">
-        <span class="brand__text">Akpol Golf Charity<span>Swing for NTT · 2026</span></span>
+        <span class="brand__text">Akpol Golf Charity<span>Swing for Hope, Drive for NTT</span></span>
       </a>
       <nav class="nav__links" aria-label="Navigasi utama">
         <a href="#acara">Acara</a>
@@ -374,7 +389,7 @@ html{scroll-behavior:smooth}
       </nav>
       <div class="nav__actions">
         <a class="btn btn--ghost btn--sm" href="#kontak">Hubungi panitia</a>
-        <a class="btn btn--filled btn--sm" href="#daftar">Daftar sekarang</a>
+        <a class="btn btn--filled btn--sm" href="#daftar"><span class="lbl-long">Daftar sekarang</span><span class="lbl-short">Daftar</span></a>
         <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navPanel">Menu</button>
       </div>
     </div>
@@ -399,7 +414,7 @@ html{scroll-behavior:smooth}
   <div class="wrap hero__inner">
     <span class="eyebrow eyebrow--light">PORSIMAPTAR XXVI · Akademi Kepolisian</span>
     <h1>Akpol Golf Charity 2026</h1>
-    <p class="hero__sub">Turnamen golf amal “Swing for NTT” — 18 hole shotgun start di Semarang Royale Golf, sekaligus penggalangan dana untuk masyarakat Nusa Tenggara Timur.</p>
+    <p class="hero__sub">Turnamen golf amal “Swing for Hope, Drive for NTT” — 18 hole shotgun start di Semarang Royale Golf, sekaligus penggalangan dana untuk masyarakat Nusa Tenggara Timur.</p>
     <div class="hero__facts">
       <span class="tag tag--dark">Jumat, 23 Oktober 2026</span>
       <span class="tag tag--dark">10.00 WIB – selesai</span>
@@ -588,7 +603,7 @@ html{scroll-behavior:smooth}
       </div>
       <div class="venue__actions">
         <a class="btn btn--outline btn--sm" href="https://www.google.com/maps/search/?api=1&amp;query=Semarang%20Royale%20Golf%20Jl.%20Gombel%20Lama%20No.%2090%20Semarang" target="_blank" rel="noopener">Petunjuk arah</a>
-        <a class="btn btn--filled btn--sm" href="#daftar">Daftar sekarang</a>
+        <a class="btn btn--filled btn--sm" href="#daftar"><span class="lbl-long">Daftar sekarang</span><span class="lbl-short">Daftar</span></a>
       </div>
     </div>
   </div>
@@ -837,7 +852,7 @@ html{scroll-behavior:smooth}
         <img class="foot__logo" src="logo-full.png" alt="Akpol Golf Charity" width="620" height="482">
         <img class="crest" src="akpol-crest.png" alt="Lambang Akademi Kepolisian" width="360" height="381">
       </div>
-      <div style="font-size:15px;font-weight:600;margin-top:var(--spacing-16)">Akpol Golf Charity 2026 — “Swing for NTT”</div>
+      <div style="font-size:15px;font-weight:600;margin-top:var(--spacing-16)">Akpol Golf Charity 2026 — “Swing for Hope, Drive for NTT”</div>
       <div class="caption" style="margin-top:var(--spacing-4)">PORSIMAPTAR XXVI · Resimen Korps Taruna Akademi Kepolisian</div>
     </div>
     <p class="foot__disc">Informasi di halaman ini disusun berdasarkan proposal kegiatan. Sejumlah detail — tarif peserta internal, isi goodie bag, hadiah hole in one, dan ketentuan pembatalan — masih menunggu penetapan panitia dan dapat berubah.</p>
@@ -1050,7 +1065,7 @@ var HERO_PHOTO_CREDIT = "";
 
   function ringkasanTeks(d) {
     var b = [
-      "Pendaftaran Akpol Golf Charity 2026 - Swing for NTT",
+      "Pendaftaran Akpol Golf Charity 2026 - Swing for Hope, Drive for NTT",
       "Kode: " + d.kode,
       "Kategori: " + LABEL[d.kategori] + (d.kode_undangan ? " (kode: " + d.kode_undangan + ")" : ""),
       "Tarif: " + TARIF[d.kategori],

@@ -12,8 +12,8 @@ const HEAD =
   '<meta charset="utf-8">\n' +
   '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' +
   '<meta name="theme-color" content="#072A5C">\n' +
-  '<meta name="description" content="Akpol Golf Charity 2026 — Swing for NTT. Turnamen golf amal, Jumat 23 Oktober 2026 di Semarang Royale Golf. Pendaftaran peserta dibuka.">\n' +
-  '<meta property="og:title" content="Akpol Golf Charity 2026 — Swing for NTT">\n' +
+  '<meta name="description" content="Akpol Golf Charity 2026 — Swing for Hope, Drive for NTT. Turnamen golf amal, Jumat 23 Oktober 2026 di Semarang Royale Golf. Pendaftaran peserta dibuka.">\n' +
+  '<meta property="og:title" content="Akpol Golf Charity 2026 — Swing for Hope, Drive for NTT">\n' +
   '<meta property="og:description" content="Turnamen golf amal, Jumat 23 Oktober 2026 di Semarang Royale Golf. Rp2.500.000 per peserta umum, kuota 120 peserta.">\n' +
   '<meta property="og:type" content="website">\n' +
   '<meta property="og:image" content="logo-full.png">\n' +

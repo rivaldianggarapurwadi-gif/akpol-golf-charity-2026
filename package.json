@@ -2,7 +2,7 @@
   "name": "akpol-golf-charity-2026",
   "version": "1.0.0",
   "private": true,
-  "description": "Situs acara dan pendaftaran Akpol Golf Charity 2026 — Swing for NTT",
+  "description": "Situs acara dan pendaftaran Akpol Golf Charity 2026 — Swing for Hope, Drive for NTT",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

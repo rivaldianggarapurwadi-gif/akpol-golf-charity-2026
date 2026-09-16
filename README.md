@@ -1,4 +1,4 @@
-# Akpol Golf Charity 2026 — "Swing for NTT"
+# Akpol Golf Charity 2026 — "Swing for Hope, Drive for NTT"
 
 Situs acara dan pendaftaran peserta. Satu halaman statis, tanpa dependency.
 

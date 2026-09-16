@@ -167,17 +167,17 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 .foot__marks::after{content:none}
 .contact__org{display:flex;align-items:center;gap:var(--spacing-12);margin-top:var(--spacing-4)}
 .mock__mark{height:22px;width:auto;flex:none}
-.brand__text{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.2;color:var(--color-navy)}
-.brand__text span{display:block;font-size:var(--text-caption);font-weight:400;color:var(--text-muted);letter-spacing:0}
-.nav__links{display:flex;align-items:center;gap:var(--spacing-24)}
-.nav__links a{font-size:14px;font-weight:500;color:var(--color-body)}
+.brand__text{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.2;color:var(--color-navy);white-space:nowrap}
+.brand__text span{display:block;font-size:var(--text-caption);font-weight:400;color:var(--text-muted);letter-spacing:0;white-space:nowrap}
+.nav__links{display:flex;align-items:center;gap:var(--spacing-16)}
+.nav__links a{font-size:14px;font-weight:500;color:var(--color-body);white-space:nowrap}
 .nav__links a:hover{color:var(--color-red);text-decoration:none}
 .nav__actions{display:flex;align-items:center;gap:var(--spacing-8)}
 .nav__toggle{display:none;background:none;border:1px solid var(--color-cloud-gray);border-radius:var(--radius-buttons);
   padding:8px 12px;font:500 14px/1 var(--font-inter);color:var(--color-body);cursor:pointer}
 .nav__panel{display:none;padding-bottom:var(--spacing-16)}
 .nav__panel a{display:block;padding:10px 0;font-size:15px;font-weight:500;color:var(--color-body);border-bottom:1px solid var(--color-mist-gray)}
-@media (max-width:1000px){
+@media (max-width:1180px){
   .nav__links{display:none}
   .nav__actions .btn--ghost{display:none}
   .nav__toggle{display:inline-block}
@@ -311,6 +311,14 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 @media (max-width:820px){.venue__actions{justify-content:flex-start}}
 
 /* ===== logo wall ===== */
+.gb{border:1px solid var(--color-mist-gray);border-radius:var(--radius-largecontainers);overflow:hidden;background:var(--color-paper-white)}
+.gb img{width:100%;height:auto;display:block}
+.gb__isi{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-24);padding:clamp(20px,3vw,32px)}
+@media (max-width:900px){.gb__isi{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.gb__isi{grid-template-columns:1fr}}
+.gb__item h4{font-size:16px;font-weight:600;color:var(--color-navy);letter-spacing:-.01em;line-height:1.3}
+.gb__item p{font-size:14px;color:var(--text-muted);line-height:1.5;margin-top:var(--spacing-4)}
+.gb__nomor{display:block;font-size:12px;font-weight:600;color:var(--color-gold);letter-spacing:1.4px;margin-bottom:var(--spacing-6)}
 .hadiah--4{grid-template-columns:repeat(4,1fr)}
 @media (max-width:1000px){.hadiah--4{grid-template-columns:repeat(2,1fr)}}
 .piala{display:grid;grid-template-columns:240px 1fr;gap:clamp(20px,3vw,40px);align-items:center;
@@ -436,6 +444,7 @@ html{scroll-behavior:smooth}
         <a href="#acara">Acara</a>
         <a href="#charity">Charity for NTT</a>
         <a href="#paket">Paket</a>
+        <a href="#goodiebag">Goodie bag</a>
         <a href="#jadwal">Jadwal</a>
         <a href="#hadiah">Hadiah</a>
         <a href="#sponsor">Sponsor</a>
@@ -451,6 +460,7 @@ html{scroll-behavior:smooth}
       <a href="#acara">Acara</a>
       <a href="#charity">Charity for NTT</a>
       <a href="#paket">Paket peserta</a>
+      <a href="#goodiebag">Goodie bag</a>
       <a href="#jadwal">Jadwal &amp; lokasi</a>
       <a href="#hadiah">Hadiah &amp; lucky draw</a>
       <a href="#sponsor">Sponsor &amp; mitra</a>
@@ -623,10 +633,48 @@ html{scroll-behavior:smooth}
         </ul>
       </div>
       <div class="callout">
-        <strong>Isi goodie bag masih dikonfirmasi.</strong><br>
-        Proposal mencatat dua versi — (1) manset, cap, jersey; (2) cap, jersey, bola golf, tumbler. Cap dan jersey ada di kedua versi; sisanya diumumkan setelah panitia menetapkan. Ukuran jersey dikumpulkan saat pendaftaran.
+        <strong>Isi goodie bag.</strong><br>
+        Tas kain, kaus polo, topi, dan sarung tangan golf — semuanya bertema Akpol Golf Charity. Ukuran polo dipilih saat pendaftaran. <a href="#goodiebag">Lihat rancangan lengkapnya →</a>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="section" id="goodiebag">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Goodie bag</span>
+      <h2>Perlengkapan peserta</h2>
+      <p class="lede">Setiap peserta menerima satu set perlengkapan bertema Akpol Golf Charity — dibagikan saat registrasi ulang, pukul 10.00–11.00 WIB.</p>
+    </div>
+
+    <div class="gb">
+      <img src="goodiebag.jpg" alt="Isi goodie bag Akpol Golf Charity: tas kain, kaus polo, topi, dan sarung tangan golf dengan lambang Akademi Kepolisian dan logo acara" width="1400" height="808" loading="lazy">
+      <div class="gb__isi">
+        <div class="gb__item">
+          <span class="gb__nomor">01</span>
+          <h4>Tas kain</h4>
+          <p>Tote kanvas dengan lis biru, lambang Akademi Kepolisian, dan logo acara di sisi depan.</p>
+        </div>
+        <div class="gb__item">
+          <span class="gb__nomor">02</span>
+          <h4>Kaus polo</h4>
+          <p>Kerah biru dengan sapuan warna merah, kuning, dan biru. Ukuran dipilih saat pendaftaran.</p>
+        </div>
+        <div class="gb__item">
+          <span class="gb__nomor">03</span>
+          <h4>Topi</h4>
+          <p>Topi putih berlidah biru, bordir lambang Akpol dan logo Akpol Golf Charity.</p>
+        </div>
+        <div class="gb__item">
+          <span class="gb__nomor">04</span>
+          <h4>Sarung tangan golf</h4>
+          <p>Sarung tangan putih dengan penanda bertuliskan AKPOL dan lambang akademi.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="caption" style="margin-top:var(--spacing-16)">Gambar adalah rancangan visual dari panitia — “More Than a Game, A Brighter Tomorrow”. Rincian akhir dapat berubah menjelang hari pelaksanaan.</p>
   </div>
 </section>
 
@@ -1009,7 +1057,8 @@ html{scroll-behavior:smooth}
    tidak diarahkan ke nomor yang salah.
    ======================================================================= */
 var PANITIA = {
-  wa: "",
+  nama: "Ovi",
+  wa: "6282221660855",
   email: ""
 };
 
@@ -1028,8 +1077,14 @@ var HERO_PHOTO_CREDIT = "";
   var STORE_KEY = "agc26_pendaftaran";
 
   /* ---------- kontak ---------- */
+  function rapiWa(n) {
+    /* 6282221660855 -> +62 822-2166-0855 */
+    var m = /^62(\d{3})(\d{4})(\d{3,5})$/.exec(n);
+    return m ? "+62 " + m[1] + "-" + m[2] + "-" + m[3] : "+" + n;
+  }
   $("contactWa").innerHTML = PANITIA.wa
-    ? '<a href="https://wa.me/' + PANITIA.wa + '" target="_blank" rel="noopener">+' + PANITIA.wa + '</a>'
+    ? '<a href="https://wa.me/' + PANITIA.wa + '" target="_blank" rel="noopener">' + rapiWa(PANITIA.wa) + '</a>'
+      + (PANITIA.nama ? '<div class="caption" style="margin-top:2px">Narahubung: ' + PANITIA.nama + '</div>' : '')
     : '<span class="muted" style="font-weight:400">Nomor WhatsApp panitia belum dipasang</span>';
   $("contactEmail").innerHTML = PANITIA.email
     ? '<a href="mailto:' + PANITIA.email + '">' + PANITIA.email + '</a>'

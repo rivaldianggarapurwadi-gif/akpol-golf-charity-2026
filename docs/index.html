@@ -153,6 +153,11 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 .brand:hover{text-decoration:none}
 .brand__mark{height:42px;width:auto;flex:none}
 .foot__logo{height:88px;width:auto;display:block}
+.crest{height:76px;width:auto;display:block;flex:none}
+.crest--sm{height:46px}
+.foot__marks{display:flex;align-items:center;gap:var(--spacing-24)}
+.foot__marks::after{content:none}
+.contact__org{display:flex;align-items:center;gap:var(--spacing-12);margin-top:var(--spacing-4)}
 .mock__mark{height:22px;width:auto;flex:none}
 .brand__text{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.2;color:var(--color-navy)}
 .brand__text span{display:block;font-size:var(--text-caption);font-weight:400;color:var(--text-muted);letter-spacing:0}
@@ -832,7 +837,7 @@ html{scroll-behavior:smooth}
     <div class="contact">
       <div><div class="contact__k">WhatsApp panitia</div><div class="contact__v" id="contactWa">—</div></div>
       <div><div class="contact__k">Email</div><div class="contact__v" id="contactEmail">—</div></div>
-      <div><div class="contact__k">Sekretariat</div><div class="contact__v">Resimen Korps Taruna<br>Akademi Kepolisian, Semarang</div></div>
+      <div><div class="contact__k">Sekretariat</div><div class="contact__org"><img class="crest crest--sm" src="akpol-crest.png" alt="" aria-hidden="true" width="360" height="381"><div class="contact__v" style="margin-top:0">Resimen Korps Taruna<br>Akademi Kepolisian, Semarang</div></div></div>
     </div>
   </div>
 </section>
@@ -840,7 +845,10 @@ html{scroll-behavior:smooth}
 <footer>
   <div class="wrap foot">
     <div>
-      <img class="foot__logo" src="logo-full.png" alt="Akpol Golf Charity" width="620" height="482">
+      <div class="foot__marks">
+        <img class="foot__logo" src="logo-full.png" alt="Akpol Golf Charity" width="620" height="482">
+        <img class="crest" src="akpol-crest.png" alt="Lambang Akademi Kepolisian" width="360" height="381">
+      </div>
       <div style="font-size:15px;font-weight:600;margin-top:var(--spacing-16)">Akpol Golf Charity 2026 — “Swing for NTT”</div>
       <div class="caption" style="margin-top:var(--spacing-4)">PORSIMAPTAR XXVI · Resimen Korps Taruna Akademi Kepolisian</div>
     </div>

@@ -58,6 +58,29 @@ Isi `/docs` di root repo sudah siap saji (`npm run build:docs` untuk memperbarui
 
 Setiap push ke branch tersebut otomatis men-deploy ulang.
 
+## Latar hero
+
+Latar hero adalah rekaman seismograf yang digambar di canvas — bertema gempa
+Flores/NTT, tanpa memakai foto pihak lain.
+
+Untuk memakai **foto asli**:
+
+1. Taruh file fotonya di repo ini, misalnya `hero.jpg`.
+2. Di `index.html`, pada blok `:root`, ubah:
+   ```css
+   --hero-photo: url("hero.jpg");
+   --hero-photo-opacity: .5;   /* naikkan/turunkan agar teks tetap terbaca */
+   ```
+3. Isi kredit fotonya di atas `<script>` — wajib kalau fotonya milik pihak lain:
+   ```js
+   var HERO_PHOTO_CREDIT = "Foto: <nama sumber>, <keterangan>";
+   ```
+4. `npm run build:docs`.
+
+Scrim navy di atas foto sudah disiapkan, jadi judul tetap terbaca di foto
+apa pun. Pakai hanya foto yang Anda punya haknya atau yang lisensinya
+mengizinkan — foto kantor berita tidak boleh dipakai tanpa izin.
+
 ## Sebelum dibagikan ke peserta
 
 Isi kontak panitia di bagian atas `<script>` dalam `index.html`:

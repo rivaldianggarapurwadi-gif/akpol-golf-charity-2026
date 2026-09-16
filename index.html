@@ -15,6 +15,10 @@
   --text-muted:rgba(39,37,37,.64);
   --hero-sky-top:#03132E;
   --hero-sky-bottom:#072A5C;
+  /* Foto latar hero. Taruh file fotonya di repo ini, lalu ganti none menjadi
+     url("nama-file.jpg"). Kosongkan (none) untuk kembali ke latar polos. */
+  --hero-photo:none;
+  --hero-photo-opacity:.5;
   --navy-wash:rgba(7,42,92,.05);
   --gold-wash:rgba(250,179,18,.18);
 
@@ -154,7 +158,13 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 
 /* ===== hero ===== */
 .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--hero-sky-top),var(--hero-sky-bottom));color:#fff;isolation:isolate}
+.hero__photo{position:absolute;inset:0;background-image:var(--hero-photo);background-size:cover;
+  background-position:center 40%;opacity:var(--hero-photo-opacity);z-index:-3}
+.hero__scrim{position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(180deg,rgba(3,19,46,.74),rgba(7,42,92,.9))}
 .hero__sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero__credit{font-size:12px;line-height:1.5;color:rgba(255,255,255,.6);margin-top:var(--spacing-24);max-width:60ch}
+.hero__credit a{color:rgba(255,255,255,.8);text-decoration:underline}
 .hero__inner{padding-block:var(--spacing-72) 0;text-align:center;display:flex;flex-direction:column;align-items:center}
 .hero h1{color:#fff;max-width:16ch}
 .hero__sub{font-size:18px;line-height:1.5;color:rgba(255,255,255,.8);max-width:58ch;margin-top:var(--spacing-16)}
@@ -373,6 +383,8 @@ html{scroll-behavior:smooth}
 </header>
 
 <section class="hero">
+  <div class="hero__photo" aria-hidden="true"></div>
+  <div class="hero__scrim" aria-hidden="true"></div>
   <canvas class="hero__sky" id="sky" aria-hidden="true"></canvas>
   <div class="wrap hero__inner">
     <span class="eyebrow eyebrow--light">PORSIMAPTAR XXVI · Akademi Kepolisian</span>
@@ -393,6 +405,7 @@ html{scroll-behavior:smooth}
     </form>
     <p class="hero__note">Kuota 120 peserta · pembayaran dan konfirmasi dilakukan bersama panitia</p>
     <a class="hero__link" href="#paket">Lihat paket peserta →</a>
+    <p class="hero__credit" id="heroCredit" hidden></p>
     <div class="hero__pad"></div>
   </div>
 </section>
@@ -832,6 +845,12 @@ var PANITIA = {
   email: ""
 };
 
+/* Kredit foto latar hero — WAJIB diisi kalau --hero-photo memakai foto milik
+   pihak lain (kantor berita, BNPB, fotografer). Contoh:
+   "Foto: BNPB — dokumentasi tanggap darurat gempa Flores, Agustus 2026".
+   Dibiarkan kosong kalau latar hero tidak memakai foto. */
+var HERO_PHOTO_CREDIT = "";
+
 (function () {
   "use strict";
 
@@ -864,42 +883,32 @@ var PANITIA = {
     }
   });
 
-  /* ---------- langit hero: awan yang dilukis ---------- */
+  /* ---------- latar hero: rekaman seismograf ---------- */
   var sky = $("sky");
-  function awan(ctx, x, y, s, alpha) {
-    var puffs = [[0,0,1],[0.85,0.18,0.74],[-0.88,0.22,0.7],[0.38,-0.46,0.66],[-0.42,-0.36,0.6],[1.55,0.36,0.5],[-1.6,0.38,0.46],[0.05,0.4,0.85]];
-    var r = 42 * s, i, p;
-    ctx.save();
+
+  /* Deret pseudo-acak dengan benih tetap: gambarnya sama setiap kali dimuat,
+     jadi halaman tidak "berkedip" berubah bentuk saat di-resize. */
+  function noise(seed) {
+    var x = Math.sin(seed * 12.9898) * 43758.5453;
+    return (x - Math.floor(x)) * 2 - 1;
+  }
+
+  function jejak(ctx, w, h, baseY, amp, alpha, warna, benih) {
+    var burst = w * 0.56, lebar = w * 0.17, x, n, env, y;
+    ctx.beginPath();
+    for (x = 0; x <= w; x += 2) {
+      n = noise(x * 0.9 + benih) * 0.35 + noise(x * 0.21 + benih * 3) * 0.3;
+      env = Math.exp(-Math.pow((x - burst) / lebar, 2)) * 2.4
+          + Math.exp(-Math.pow((x - burst - lebar * 1.9) / (lebar * 1.7), 2)) * 1.1
+          + 0.18;
+      y = baseY + n * amp * env;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = warna;
     ctx.globalAlpha = alpha;
-    /* bayangan hangat di bawah */
-    ctx.fillStyle = "#E2B87B";
-    for (i = 0; i < puffs.length; i++) {
-      p = puffs[i];
-      ctx.beginPath();
-      ctx.arc(x + p[0] * r, y + p[1] * r + 9 * s, r * p[2], 0, Math.PI * 2);
-      ctx.fill();
-    }
-    /* badan awan */
-    var g = ctx.createLinearGradient(0, y - r * 1.3, 0, y + r * 1.1);
-    g.addColorStop(0, "#FFF8E8");
-    g.addColorStop(0.55, "#FDEFCF");
-    g.addColorStop(1, "#F6DEAE");
-    ctx.fillStyle = g;
-    for (i = 0; i < puffs.length; i++) {
-      p = puffs[i];
-      ctx.beginPath();
-      ctx.arc(x + p[0] * r, y + p[1] * r, r * p[2], 0, Math.PI * 2);
-      ctx.fill();
-    }
-    /* sorot cahaya di puncak */
-    ctx.fillStyle = "rgba(255,255,255,0.4)";
-    ctx.beginPath();
-    ctx.arc(x + 0.3 * r, y - 0.55 * r, r * 0.42, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x - 0.35 * r, y - 0.42 * r, r * 0.3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    ctx.lineWidth = 1.1;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
   }
 
   function drawSky() {
@@ -913,44 +922,42 @@ var PANITIA = {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
 
-    /* cahaya matahari rendah */
-    var glow = ctx.createRadialGradient(w * 0.82, h * 0.18, 0, w * 0.82, h * 0.18, Math.max(w, h) * 0.6);
-    glow.addColorStop(0, "rgba(255,226,160,0.35)");
-    glow.addColorStop(0.45, "rgba(255,214,140,0.10)");
-    glow.addColorStop(1, "rgba(255,214,140,0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, w, h);
+    /* garis waktu tipis, seperti kertas seismograf */
+    ctx.strokeStyle = "rgba(255,255,255,0.05)";
+    ctx.lineWidth = 1;
+    for (var t = 0; t <= 12; t++) {
+      var gx = Math.round(w * t / 12) + 0.5;
+      ctx.beginPath();
+      ctx.moveTo(gx, 0);
+      ctx.lineTo(gx, h);
+      ctx.stroke();
+    }
 
-    var u = Math.min(1.2, Math.max(0.5, w / 1300));
-    if (ctx.filter !== undefined) ctx.filter = "blur(1.2px)";
-    awan(ctx, w * 0.06, h * 0.22, 1.0 * u, 0.72);
-    awan(ctx, w * 0.95, h * 0.28, 1.25 * u, 0.78);
-    awan(ctx, w * 0.2, h * 0.86, 1.45 * u, 0.8);
-    awan(ctx, w * 0.8, h * 0.93, 1.3 * u, 0.75);
-    awan(ctx, w * 1.02, h * 0.62, 0.85 * u, 0.55);
-    awan(ctx, w * -0.02, h * 0.58, 0.8 * u, 0.5);
-    awan(ctx, w * 0.5, h * 0.98, 0.9 * u, 0.3);
-    if (ctx.filter !== undefined) ctx.filter = "none";
+    /* tiga jejak: dua redup di atas dan bawah, satu utama berwarna emas */
+    var amp = Math.min(h * 0.065, 38);
+    jejak(ctx, w, h, h * 0.24, amp * 0.7, 0.16, "#FFFFFF", 11);
+    jejak(ctx, w, h, h * 0.86, amp * 0.8, 0.16, "#FFFFFF", 29);
+    jejak(ctx, w, h, h * 0.58, amp, 0.42, "#FAB312", 7);
 
     /* teduh di balik judul agar teks tetap terbaca */
-    var scrim = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.3, Math.max(w * 0.55, h * 0.6));
-    scrim.addColorStop(0, "rgba(3,19,46,0.6)");
-    scrim.addColorStop(0.6, "rgba(3,19,46,0.2)");
+    var scrim = ctx.createRadialGradient(w * 0.5, h * 0.32, 0, w * 0.5, h * 0.32, Math.max(w * 0.5, h * 0.55));
+    scrim.addColorStop(0, "rgba(3,19,46,0.72)");
+    scrim.addColorStop(0.65, "rgba(3,19,46,0.25)");
     scrim.addColorStop(1, "rgba(3,19,46,0)");
     ctx.fillStyle = scrim;
-    ctx.fillRect(0, 0, w, h);
-
-    /* kabut mint di kaki langit */
-    var haze = ctx.createLinearGradient(0, h * 0.55, 0, h);
-    haze.addColorStop(0, "rgba(7,42,92,0)");
-    haze.addColorStop(1, "rgba(7,42,92,0.35)");
-    ctx.fillStyle = haze;
     ctx.fillRect(0, 0, w, h);
   }
   drawSky();
   var rt;
   window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(drawSky, 180); });
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { setTimeout(drawSky, 60); }); }
+
+  /* Kredit foto hero tampil hanya kalau diisi (wajib untuk foto berlisensi). */
+  if (typeof HERO_PHOTO_CREDIT === "string" && HERO_PHOTO_CREDIT.trim()) {
+    var kredit = $("heroCredit");
+    kredit.textContent = HERO_PHOTO_CREDIT;
+    kredit.hidden = false;
+  }
 
   /* ---------- isian cepat di hero ---------- */
   $("quickForm").addEventListener("submit", function (e) {

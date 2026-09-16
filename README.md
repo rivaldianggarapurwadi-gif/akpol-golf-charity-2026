@@ -60,16 +60,20 @@ Setiap push ke branch tersebut otomatis men-deploy ulang.
 
 ## Latar hero
 
-Latar hero adalah rekaman seismograf yang digambar di canvas — bertema gempa
-Flores/NTT, tanpa memakai foto pihak lain.
+Latar hero memakai `hero.jpg` — foto komposit milik panitia. Di atasnya ada
+scrim navy agar judul terbaca, dan di bagian bawah ada pita gradasi yang
+melarutkan foto menjadi putih, menyambung ke bagian berikutnya.
 
-Untuk memakai **foto asli**:
+Kalau `--hero-photo` dikosongkan (`none`), latar otomatis kembali ke gambar
+seismograf yang digambar di canvas.
 
-1. Taruh file fotonya di repo ini, misalnya `hero.jpg`.
+Untuk **mengganti fotonya**:
+
+1. Taruh file baru di repo ini, misalnya `hero-baru.jpg`.
 2. Di `index.html`, pada blok `:root`, ubah:
    ```css
-   --hero-photo: url("hero.jpg");
-   --hero-photo-opacity: .5;   /* naikkan/turunkan agar teks tetap terbaca */
+   --hero-photo: url("hero-baru.jpg");
+   --hero-photo-opacity: 1;   /* turunkan kalau fotonya terlalu ramai */
    ```
 3. Isi kredit fotonya di atas `<script>` — wajib kalau fotonya milik pihak lain:
    ```js

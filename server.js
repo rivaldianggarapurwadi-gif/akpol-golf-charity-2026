@@ -34,6 +34,11 @@ const TYPES = {
 };
 
 const RAHASIA = new Set(["server.js", "store.js", "page.js", "build-docs.js", "package.json", "railway.json"]);
+/* Hanya jenis berkas ini yang boleh keluar sebagai aset. Daftar izin, bukan
+   daftar larangan: berkas data (.json) karena itu tidak akan pernah terkirim
+   walau DATA_DIR kebetulan berada di dalam folder situs. */
+const ASET = new Set([".html", ".css", ".jpg", ".jpeg", ".png", ".svg", ".ico", ".webmanifest", ".txt"]);
+const DATA_ABS = path.resolve(store.DIR);
 
 let page = buildPage(ROOT);
 const pageGz = zlib.gzipSync(Buffer.from(page), { level: 9 });
@@ -99,8 +104,30 @@ function normalWa(raw) {
   return d;
 }
 
+/* X-Forwarded-For berisi "klien, proxy1, proxy2" dan bagian paling kiri
+   dikirim oleh klien — bisa dipalsukan untuk melewati batas laju. Yang bisa
+   dipercaya adalah entri paling kanan, yang ditambahkan proxy terdekat
+   (edge Railway). TRUST_PROXY=0 mematikan pembacaan header ini. */
+function alamatKlien(req) {
+  if (process.env.TRUST_PROXY !== "0") {
+    const xff = (req.headers["x-forwarded-for"] || "").split(",").map(v => v.trim()).filter(Boolean);
+    if (xff.length) return xff[xff.length - 1];
+  }
+  return req.socket.remoteAddress || "?";
+}
+
 /* Pembatas laju sederhana per alamat IP. */
 const jejak = new Map();
+let jendela = { menit: 0, jumlah: 0 };
+/* Batas menyeluruh: sekitar 20 pendaftaran per menit dari sumber mana pun.
+   Peserta sungguhan tidak pernah menyentuh ini; bot yang memakai banyak IP
+   tetap tertahan sebelum kuota 120 kursi habis diisi data sampah. */
+function banjirGlobal() {
+  const m = Math.floor(Date.now() / 60000);
+  if (jendela.menit !== m) jendela = { menit: m, jumlah: 0 };
+  return ++jendela.jumlah > 20;
+}
+
 function lajuTerlampaui(ip) {
   const now = Date.now(), jam = 60 * 60 * 1000;
   const list = (jejak.get(ip) || []).filter(function (t) { return now - t < jam; });
@@ -130,7 +157,7 @@ function publik(p) {
 /* ---------- API ---------- */
 
 async function daftar(req, res, ip) {
-  if (lajuTerlampaui(ip)) return json(res, 429, { error: "Terlalu banyak pendaftaran dari perangkat ini. Coba lagi nanti atau hubungi panitia." });
+  if (lajuTerlampaui(ip) || banjirGlobal()) return json(res, 429, { error: "Terlalu banyak pendaftaran dalam waktu singkat. Coba lagi beberapa menit lagi atau hubungi panitia." });
 
   let b;
   try { b = await badanJson(req); } catch (e) { return json(res, 400, { error: "Data tidak terbaca." }); }
@@ -260,8 +287,12 @@ async function checkin(req, res) {
 
 function berkas(req, res, url) {
   const aman = path.normalize(url).replace(/^(\.\.[/\\])+/, "");
-  const file = path.join(ROOT, aman);
-  if (!file.startsWith(ROOT) || RAHASIA.has(path.basename(file))) return false;
+  const file = path.resolve(ROOT, "." + path.sep + aman);
+  const nama = path.basename(file);
+  if (!file.startsWith(ROOT + path.sep)) return false;
+  if (RAHASIA.has(nama) || nama.startsWith(".")) return false;
+  if (!ASET.has(path.extname(file).toLowerCase())) return false;
+  if (file === DATA_ABS || file.startsWith(DATA_ABS + path.sep)) return false;
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return false;
 
   const st = fs.statSync(file);
@@ -289,10 +320,37 @@ function berkas(req, res, url) {
 
 /* ---------- router ---------- */
 
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  "base-uri 'self'",
+  "object-src 'none'"
+].join("; ");
+
+function headerKeamanan(req, res) {
+  res.setHeader("content-security-policy", CSP);
+  res.setHeader("x-content-type-options", "nosniff");
+  res.setHeader("x-frame-options", "SAMEORIGIN");
+  res.setHeader("referrer-policy", "strict-origin-when-cross-origin");
+  res.setHeader("permissions-policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  /* HSTS hanya kalau permintaannya memang sampai lewat HTTPS. */
+  if ((req.headers["x-forwarded-proto"] || "").split(",")[0].trim() === "https") {
+    res.setHeader("strict-transport-security", "max-age=15552000; includeSubDomains");
+  }
+}
+
 const server = http.createServer(function (req, res) {
+  res.req = req;
+  headerKeamanan(req, res);
   const u = new URL(req.url, "http://x");
   const jalur = u.pathname;
-  const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.socket.remoteAddress || "?";
+  const ip = alamatKlien(req);
 
   if (jalur === "/healthz") return kirim(res, 200, "text/plain; charset=utf-8", "ok");
 

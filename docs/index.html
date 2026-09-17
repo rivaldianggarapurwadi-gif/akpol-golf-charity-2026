@@ -338,6 +338,20 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 .hadiah__nama{font-size:14px;font-weight:500;line-height:1.35;padding:var(--spacing-12) var(--spacing-12) var(--spacing-16);
   border-top:1px solid var(--color-mist-gray)}
 .sub-head{margin-top:clamp(40px,5vw,64px);max-width:640px;margin-inline:auto;text-align:center}
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-16);margin-top:var(--spacing-24);align-items:stretch}
+@media (max-width:1040px){.tiers{grid-template-columns:repeat(2,1fr);gap:var(--spacing-24)}}
+@media (max-width:560px){.tiers{grid-template-columns:1fr}}
+.tier{display:flex;flex-direction:column;background:var(--color-paper-white);
+  border:1px solid var(--color-mist-gray);border-radius:var(--radius-cards);padding:var(--spacing-24)}
+.tier--title{border-color:rgba(250,179,18,.5);box-shadow:var(--shadow-card)}
+.tier__kontribusi{font-size:13px;color:var(--text-muted);letter-spacing:var(--tracking-caption);
+  padding-bottom:var(--spacing-12);border-bottom:1px solid var(--color-mist-gray)}
+.tier__angka{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-12);padding:var(--spacing-16) 0}
+.tier__angka b{display:block;font-size:24px;font-weight:600;color:var(--color-navy);line-height:1.1;font-variant-numeric:tabular-nums}
+.tier__angka span{display:block;font-size:12px;color:var(--text-muted);margin-top:2px;line-height:1.35}
+.tier .list{font-size:14px;gap:var(--spacing-8);margin-top:auto}
+.tier .list li{padding-left:22px;line-height:1.45}
+.tier .list li::before{top:.4em;width:9px;height:5px}
 .logos{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-24);margin-top:var(--spacing-48)}
 @media (max-width:820px){.logos{grid-template-columns:repeat(2,1fr)}}
 .logo-tile{height:64px;display:grid;place-items:center;background:var(--color-mist-gray);border-radius:var(--radius-buttons);
@@ -616,7 +630,7 @@ html{scroll-behavior:smooth}
         <span class="tag">Kode sponsor</span>
         <h3>Sponsor &amp; mitra</h3>
         <div class="card__price">Slot peserta<small>menyertai paket sponsor</small></div>
-        <p>Paket sponsor membawa slot peserta tersendiri. Jumlah slot ditetapkan panitia dan diperhitungkan dalam kuota 120 peserta.</p>
+        <p>Paket sponsor membawa tiket undangan — 2 sampai 12 tiket tergantung tingkatnya. Kebutuhan slot pemain dibicarakan bersama panitia.</p>
         <a class="btn btn--outline btn--sm" href="#sponsor">Lihat paket sponsor</a>
       </div>
     </div>
@@ -821,23 +835,69 @@ html{scroll-behavior:smooth}
     <div class="section-head">
       <span class="eyebrow">Sponsor &amp; mitra</span>
       <h2>Dukung acara, dukung NTT</h2>
-      <p class="lede">Paket sponsor tersedia mulai dari dukungan per hole sampai Title Sponsor, lengkap dengan slot peserta dan ruang eksposur di lapangan.</p>
+      <p class="lede">Empat tingkat dukungan, masing-masing dengan logo di backdrop, umbul-umbul di sekitar Club House, tiket undangan, dan hak promosi produk di lokasi acara.</p>
     </div>
-    <div class="grid grid--2">
-      <div class="card">
-        <span class="eyebrow">Hole sponsor</span>
-        <div class="card__price">Mulai Rp7.500.000<small>per hole</small></div>
-        <p>Titik masuk paling ringan untuk mitra yang ingin hadir di lapangan sepanjang pertandingan.</p>
+    <div class="tiers">
+      <div class="tier tier--title">
+        <span class="eyebrow">Sponsor utama</span>
+        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
+        <div class="tier__angka">
+          <div><b>30</b><span>umbul-umbul di Club House</span></div>
+          <div><b>12</b><span>tiket undangan</span></div>
+        </div>
+        <ul class="list">
+          <li>Logo di seluruh backdrop</li>
+          <li>Logo di banner panggung</li>
+          <li>Nama perusahaan diumumkan pembawa acara</li>
+          <li>Promosi produk, flyer, dan brosur perusahaan</li>
+        </ul>
       </div>
-      <div class="card card--mint">
-        <span class="eyebrow">Title sponsor</span>
-        <div class="card__price">Rp200.000.000<small>posisi tertinggi</small></div>
-        <p>Penamaan dan penempatan tertinggi di seluruh materi acara. Paket-paket di antara kedua angka ini tersedia; rincian benefit dikirim panitia.</p>
+      <div class="tier">
+        <span class="eyebrow">Platinum</span>
+        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
+        <div class="tier__angka">
+          <div><b>25</b><span>umbul-umbul di Club House</span></div>
+          <div><b>8</b><span>tiket undangan</span></div>
+        </div>
+        <ul class="list">
+          <li>Logo di seluruh backdrop</li>
+          <li>Logo tayang di LED/videotron</li>
+          <li>Nama perusahaan diumumkan pembawa acara</li>
+          <li>Promosi produk, flyer, dan brosur perusahaan</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <span class="eyebrow">Gold</span>
+        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
+        <div class="tier__angka">
+          <div><b>20</b><span>umbul-umbul di Club House</span></div>
+          <div><b>4</b><span>tiket undangan</span></div>
+        </div>
+        <ul class="list">
+          <li>Logo di seluruh backdrop</li>
+          <li>Logo tayang di LED/videotron</li>
+          <li>Nama perusahaan diumumkan pembawa acara</li>
+          <li>Promosi produk, flyer, dan brosur perusahaan</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <span class="eyebrow">Silver</span>
+        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
+        <div class="tier__angka">
+          <div><b>15</b><span>umbul-umbul di Club House</span></div>
+          <div><b>2</b><span>tiket undangan</span></div>
+        </div>
+        <ul class="list">
+          <li>Logo di seluruh backdrop</li>
+          <li>Logo tayang di LED/videotron</li>
+          <li>Nama perusahaan diumumkan pembawa acara</li>
+          <li>Promosi produk, flyer, dan brosur perusahaan</li>
+        </ul>
       </div>
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:var(--spacing-16);align-items:center;margin-top:var(--spacing-24)">
       <a class="btn btn--filled" href="#kontak">Hubungi panitia untuk sponsorship</a>
-      <span class="caption">Slot peserta dari paket sponsor diperhitungkan dalam kuota 120 peserta.</span>
+      <span class="caption">Nilai kontribusi tiap tingkat ditetapkan bersama panitia. Kebutuhan slot pemain dibicarakan terpisah dari tiket undangan.</span>
     </div>
     <div class="logos" aria-label="Ruang untuk logo sponsor dan mitra">
       <div class="logo-tile">Ruang logo sponsor</div>

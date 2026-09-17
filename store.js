@@ -17,10 +17,20 @@ const KUOTA = Number(process.env.KUOTA_PESERTA || 120);
 
 let antre = Promise.resolve();
 
+/* Isi berkas disimpan di memori dan hanya dibaca ulang kalau waktu ubahnya
+   berbeda. Tanpa ini setiap kunjungan halaman (yang memanggil /api/kuota)
+   memicu satu pembacaan disk sinkron di atas event loop. */
+let cache = null;
+
 function bacaSync() {
   try {
-    return JSON.parse(fs.readFileSync(FILE, "utf8"));
+    const st = fs.statSync(FILE);
+    if (cache && cache.mtimeMs === st.mtimeMs) return cache.data;
+    const data = JSON.parse(fs.readFileSync(FILE, "utf8"));
+    cache = { mtimeMs: st.mtimeMs, data: data };
+    return data;
   } catch (e) {
+    if (cache) return cache.data;
     return { peserta: [] };
   }
 }
@@ -30,6 +40,7 @@ function tulisSync(data) {
   const tmp = FILE + ".tmp";
   fs.writeFileSync(tmp, JSON.stringify(data, null, 2));
   fs.renameSync(tmp, FILE);
+  cache = { mtimeMs: fs.statSync(FILE).mtimeMs, data: data };
 }
 
 /** Jalankan fn(data) secara berurutan; kembaliannya dikirim ke pemanggil. */

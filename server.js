@@ -13,6 +13,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 const { buildPage } = require("./page.js");
 const store = require("./store.js");
 
@@ -35,9 +36,16 @@ const TYPES = {
 const RAHASIA = new Set(["server.js", "store.js", "page.js", "build-docs.js", "package.json", "railway.json"]);
 
 let page = buildPage(ROOT);
+const pageGz = zlib.gzipSync(Buffer.from(page), { level: 9 });
 const pageEtag = '"' + require("crypto").createHash("sha1").update(page).digest("hex").slice(0, 16) + '"';
 
 /* ---------- utilitas ---------- */
+
+/* Teks dikirim terkompresi kalau browsernya mendukung: halaman 81 KB turun
+   ke sekitar 15 KB, dan itu berlaku untuk setiap kunjungan. */
+function gzipDidukung(req) {
+  return /\bgzip\b/.test(req.headers["accept-encoding"] || "");
+}
 
 function kirim(res, status, type, body, extra) {
   const head = Object.assign({ "content-type": type }, extra || {});
@@ -45,8 +53,25 @@ function kirim(res, status, type, body, extra) {
   res.end(body);
 }
 
+function kirimTeks(req, res, status, type, body, extra) {
+  const head = Object.assign({ "content-type": type, vary: "accept-encoding" }, extra || {});
+  const buf = Buffer.isBuffer(body) ? body : Buffer.from(body);
+  if (buf.length > 1024 && gzipDidukung(req)) {
+    const gz = zlib.gzipSync(buf, { level: 6 });
+    head["content-encoding"] = "gzip";
+    head["content-length"] = gz.length;
+    res.writeHead(status, head);
+    return res.end(gz);
+  }
+  head["content-length"] = buf.length;
+  res.writeHead(status, head);
+  res.end(buf);
+}
+
 function json(res, status, obj) {
-  kirim(res, status, TYPES[".json"], JSON.stringify(obj));
+  const body = JSON.stringify(obj);
+  if (res.req && body.length > 1024) return kirimTeks(res.req, res, status, TYPES[".json"], body);
+  kirim(res, status, TYPES[".json"], body);
 }
 
 function badanJson(req, batas) {
@@ -302,10 +327,14 @@ const server = http.createServer(function (req, res) {
       res.writeHead(304, { etag: pageEtag, "cache-control": "public, max-age=60, must-revalidate" });
       return res.end();
     }
-    return kirim(res, 200, TYPES[".html"], page, {
-      etag: pageEtag,
-      "cache-control": "public, max-age=60, must-revalidate"
-    });
+    const head = { etag: pageEtag, "cache-control": "public, max-age=60, must-revalidate", vary: "accept-encoding" };
+    if (gzipDidukung(req)) {
+      head["content-encoding"] = "gzip";
+      head["content-length"] = pageGz.length;
+      res.writeHead(200, Object.assign({ "content-type": TYPES[".html"] }, head));
+      return res.end(pageGz);
+    }
+    return kirim(res, 200, TYPES[".html"], page, head);
   }
   if (berkas(req, res, jalur)) return;
 

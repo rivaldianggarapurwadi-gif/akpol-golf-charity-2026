@@ -16,7 +16,8 @@ for (const asset of ["logo-mark.png", "logo-full.png", "akpol-crest.png", "hero.
   "hadiah-tv.jpg", "hadiah-kulkas.jpg", "hadiah-duffle-bag.jpg",
   "hadiah-range-tracker.jpg", "hadiah-bola-golf.jpg",
   "piala-best-net.jpg", "hio-byd-atto-1.jpg", "hio-jaecoo-j5.jpg",
-  "hio-wuling-air-ev.jpg", "hio-chery-q.jpg", "goodiebag.jpg"]) {
+  "hio-wuling-air-ev.jpg", "hio-chery-q.jpg",
+  "gb-polo.jpg", "gb-topi.jpg", "gb-tas.jpg", "gb-sarung-tangan.jpg"]) {
   fs.copyFileSync(path.join(__dirname, asset), path.join(OUT, asset));
 }
 console.log("docs/ written:", fs.readdirSync(OUT).join(", "));

@@ -4,14 +4,12 @@ Situs acara dan pendaftaran peserta. Satu halaman statis, tanpa dependency.
 
 ```
 index.html      halaman (sumber tunggal; juga dipublikasikan sebagai Artifact)
-panitia.html    halaman panitia: daftar pendaftar, verifikasi, check-in, ekspor
 hero.jpg        foto latar hero
 logo-mark.png   logo (mark) — navbar & kartu peserta
 logo-full.png   logo lockup penuh — footer
 akpol-crest.png lambang Akademi Kepolisian — footer & kontak
 page.js         pembungkus: index.html -> dokumen HTML utuh (dipakai server & build)
-server.js       server + API pendaftaran
-store.js        penyimpanan pendaftaran (berkas JSON, tulis atomik)
+server.js       server statis: gzip, ETag, header keamanan
 build-docs.js   menulis hasil build ke /docs (versi statis, tanpa pendaftaran)
 package.json    npm start / npm run build:docs
 railway.json    konfigurasi deploy Railway
@@ -19,92 +17,24 @@ railway.json    konfigurasi deploy Railway
 
 ## Pendaftaran
 
-Formulir di halaman mengirim data ke API dan pendaftaran langsung tercatat:
+Situs ini **hanya memuat informasi**. Tidak ada formulir, basis data, maupun data
+pribadi peserta yang tersimpan di sini — seluruh pendaftaran dilayani panitia
+melalui WhatsApp.
 
-| Endpoint | Untuk |
-| --- | --- |
-| `POST /api/daftar` | pendaftaran peserta — validasi, cek kuota, cek duplikat, terbitkan kode |
-| `GET /api/status?kode=` | peserta mengecek status pendaftarannya |
-| `GET /api/kuota` | sisa kursi (ditampilkan di hero) |
-| `GET /api/panitia/peserta` | daftar lengkap + rekap (butuh token) |
-| `POST /api/panitia/status` | ubah status: `menunggu` / `terverifikasi` / `batal` |
-| `POST /api/panitia/checkin` | tandai check-in di lokasi |
-| `GET /api/panitia/ekspor.csv` | ekspor seluruh data peserta |
+Setiap tombol daftar membuka `wa.me` dengan pesan yang sudah tersusun sesuai
+kategorinya (peserta umum, peserta internal, sponsor). Nomor panitia tertulis
+langsung di tautan-tautan itu **dan** pada konstanta `PANITIA` di atas `<script>`.
+Bila narahubung berganti, perbarui keduanya:
 
-Kode pendaftaran diterbitkan server (`AGC26-XXXXX`), kuota dijaga di server, dan
-nomor WhatsApp atau email yang sama ditolak sebagai duplikat.
-
-**Versi statis** (`/docs`, GitHub Pages, atau Artifact) tidak punya API. Di sana
-formulir otomatis kembali ke alur lama: kode dibuat di perangkat peserta dan
-ringkasannya dikirim ke panitia lewat WhatsApp. Halaman menyebutkan bedanya
-secara terbuka, jadi peserta tidak mengira dirinya sudah tercatat.
+```bash
+grep -n "6282221660855" index.html      # daftar tautan yang perlu diubah
+```
 
 ## Halaman panitia
 
-Buka `/panitia`, masuk dengan token dari `ADMIN_TOKEN`. Isinya: sisa kuota,
-jumlah menunggu/terverifikasi/check-in, rekap ukuran jersey, pencarian dan
-penyaringan, tombol verifikasi/batal/check-in per peserta, dan ekspor CSV.
-
-Selama `ADMIN_TOKEN` belum diatur, seluruh endpoint panitia menjawab 503 —
-halaman itu tidak pernah terbuka tanpa token.
-
-`index.html` ditulis sebagai fragment Artifact — tanpa `<!doctype>`, `<head>`,
-atau `<body>`. `page.js` yang menambahkannya, dipakai baik oleh server maupun
-build statis, jadi halaman ini hanya punya satu salinan yang perlu diedit.
-Setelah mengubah `index.html`, jalankan `npm run build:docs` agar `/docs`
-ikut diperbarui.
-
-## Jalankan lokal
-
-```bash
-ADMIN_TOKEN=rahasia node server.js    # http://localhost:3000, panitia di /panitia
-```
-
-### Environment
-
-| Variabel | Arti |
-| --- | --- |
-| `PORT` | disuntik host. Default 3000. |
-| `ADMIN_TOKEN` | **wajib** agar halaman panitia bisa dipakai. Pakai nilai acak yang panjang. |
-| `DATA_DIR` | lokasi berkas data. **Arahkan ke volume** di Railway, kalau tidak data pendaftaran hilang setiap deploy. |
-| `KUOTA_PESERTA` | default 120. |
-
-## Pilihan hosting
-
-| Cara | Publik? | Yang perlu Anda lakukan |
-| --- | --- | --- |
-| **Artifact claude.ai** | ya, setelah di-share | buka halaman Artifact → tombol Share → "anyone with the link" |
-| **GitHub Pages** | ya | repo harus publik (Pages gratis hanya untuk repo publik), lalu Settings → Pages |
-| **Railway** | ya | buat project dari repo ini — tanpa konfigurasi tambahan |
-| **Netlify / Vercel** | ya | drag-and-drop folder `docs/`, atau hubungkan repo |
-
-## Deploy ke GitHub Pages
-
-Isi `/docs` di root repo sudah siap saji (`npm run build:docs` untuk memperbarui).
-
-1. Repo harus **publik** — Pages pada repo privat memerlukan GitHub Pro/Team.
-   Settings → General → Danger Zone → Change visibility.
-2. **Settings → Pages → Build and deployment**: Source `Deploy from a branch`,
-   branch `main`, folder `/docs` → Save.
-3. Setelah beberapa menit halaman terbit di
-   `https://rivaldianggarapurwadi-gif.github.io/akpol-golf-charity-2026/`.
-
-## Deploy ke Railway
-
-1. Railway → **New Project** → **Deploy from GitHub repo** → pilih
-   `rivaldianggarapurwadi-gif/akpol-golf-charity-2026`.
-2. Tidak ada yang perlu dikonfigurasi. Situs ini ada di root repo, jadi
-   **Root Directory dibiarkan kosong** dan branch-nya `main`.
-3. **Settings → Variables**: isi `ADMIN_TOKEN` (nilai acak panjang) dan
-   `DATA_DIR=/data`.
-4. **Settings → Volumes**: pasang volume dengan mount path `/data`. Tanpa ini
-   data pendaftaran hilang setiap kali deploy ulang.
-5. **Settings → Networking → Generate Domain**. Railway memberi URL
-   `*.up.railway.app` yang bisa dibuka kapan saja.
-
-Health check ada di `/healthz`; `PORT` disuntik Railway sendiri.
-
-Setiap push ke branch tersebut otomatis men-deploy ulang.
+Tidak ada lagi. Panel verifikasi, API pendaftaran, dan penyimpanan data dihapus
+bersamaan dengan perubahan konsep ini; riwayatnya masih tersimpan di git bila
+suatu saat diperlukan kembali.
 
 ## Latar hero
 

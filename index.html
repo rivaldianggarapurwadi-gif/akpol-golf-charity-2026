@@ -327,23 +327,8 @@ h4{font-size:var(--text-heading-sm);line-height:var(--leading-heading-sm);letter
 .hadiah__nama{font-size:14px;font-weight:500;line-height:1.35;padding:var(--spacing-12) var(--spacing-12) var(--spacing-16);
   border-top:1px solid var(--color-mist-gray)}
 .sub-head{margin-top:clamp(40px,5vw,64px);max-width:640px;margin-inline:auto;text-align:center}
-.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-16);margin-top:var(--spacing-24);align-items:stretch}
-@media (max-width:1040px){.tiers{grid-template-columns:repeat(2,1fr);gap:var(--spacing-24)}}
-@media (max-width:560px){.tiers{grid-template-columns:1fr}}
-.tier{display:flex;flex-direction:column;background:var(--color-paper-white);
   border:1px solid var(--color-mist-gray);border-radius:var(--radius-cards);padding:var(--spacing-24)}
-.tier--title{border-color:rgba(250,179,18,.5);box-shadow:var(--shadow-card)}
-.tier__kontribusi{font-size:13px;color:var(--text-muted);letter-spacing:var(--tracking-caption);
   padding-bottom:var(--spacing-12);border-bottom:1px solid var(--color-mist-gray)}
-.tier__angka{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-12);padding:var(--spacing-16) 0}
-.tier__angka b{display:block;font-size:24px;font-weight:600;color:var(--color-navy);line-height:1.1;font-variant-numeric:tabular-nums}
-.tier__angka span{display:block;font-size:12px;color:var(--text-muted);margin-top:2px;line-height:1.35}
-.tier .list{font-size:14px;gap:var(--spacing-8);margin-top:auto}
-.tier .list li{padding-left:22px;line-height:1.45}
-.tier .list li::before{top:.4em;width:9px;height:5px}
-.logos{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-24);margin-top:var(--spacing-48)}
-@media (max-width:820px){.logos{grid-template-columns:repeat(2,1fr)}}
-.logo-tile{height:64px;display:grid;place-items:center;background:var(--color-mist-gray);border-radius:var(--radius-buttons);
   font-size:var(--text-caption);color:var(--text-muted);letter-spacing:var(--tracking-caption);text-align:center;padding:var(--spacing-8)}
 
 /* ===== steps ===== */
@@ -419,7 +404,6 @@ html{scroll-behavior:smooth}
         <a href="#goodiebag">Goodie bag</a>
         <a href="#jadwal">Jadwal</a>
         <a href="#hadiah">Hadiah</a>
-        <a href="#sponsor">Sponsor</a>
         <a href="#faq">FAQ</a>
       </nav>
       <div class="nav__actions">
@@ -435,7 +419,6 @@ html{scroll-behavior:smooth}
       <a href="#goodiebag">Goodie bag</a>
       <a href="#jadwal">Jadwal &amp; lokasi</a>
       <a href="#hadiah">Hadiah &amp; lucky draw</a>
-      <a href="#sponsor">Sponsor &amp; mitra</a>
       <a href="#faq">FAQ</a>
       <a href="#kontak">Hubungi panitia</a>
     </div>
@@ -566,12 +549,12 @@ html{scroll-behavior:smooth}
       <h2>Satu hari penuh, satu biaya</h2>
       <p class="lede">Seluruh kategori peserta mendapat fasilitas yang sama. Yang membedakan hanya jalur pendaftaran dan tarifnya.</p>
     </div>
-    <div class="grid grid--3">
+    <div class="grid grid--2">
       <div class="card">
         <span class="tag tag--mint">Pendaftaran terbuka</span>
         <h3>Peserta umum / eksternal</h3>
         <div class="card__price">Rp2.500.000<small>per orang</small></div>
-        <p>Untuk alumni, mitra, profesional, pengusaha, dan masyarakat umum. Pendaftaran langsung melalui formulir di halaman ini.</p>
+        <p>Untuk alumni, mitra, profesional, pengusaha, dan masyarakat umum. Pendaftaran melalui WhatsApp panitia.</p>
         <a class="btn btn--wa btn--sm" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Saya%20ingin%20mendaftar%20sebagai%20peserta%20umum.%0A%0ANama%20lengkap%3A%0AInstansi/klub%3A%0AUkuran%20polo%20%28S/M/L/XL/XXL/XXXL%29%3A%0AHandicap%3A%0A%0AMohon%20informasi%20cara%20pembayarannya.%20Terima%20kasih." target="_blank" rel="noopener">Daftar via WhatsApp</a>
       </div>
       <div class="card">
@@ -580,13 +563,6 @@ html{scroll-behavior:smooth}
         <div class="card__price">Tarif menyusul<small>belum ditetapkan dalam proposal</small></div>
         <p>Untuk keluarga besar Akpol. Sebutkan satuan atau angkatan saat menghubungi panitia agar tarif dan alokasi kursinya sesuai.</p>
         <a class="btn btn--outline btn--sm" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Saya%20ingin%20mendaftar%20sebagai%20peserta%20internal%20%28keluarga%20besar%20Akpol%29.%0A%0ANama%20lengkap%3A%0ASatuan/angkatan%3A%0AUkuran%20polo%20%28S/M/L/XL/XXL/XXXL%29%3A%0AHandicap%3A%0A%0AMohon%20informasi%20tarif%20dan%20cara%20pembayarannya.%20Terima%20kasih." target="_blank" rel="noopener">Tanya tarif via WhatsApp</a>
-      </div>
-      <div class="card">
-        <span class="tag">Via panitia</span>
-        <h3>Sponsor &amp; mitra</h3>
-        <div class="card__price">Slot peserta<small>menyertai paket sponsor</small></div>
-        <p>Paket sponsor membawa tiket undangan — 2 sampai 12 tiket tergantung tingkatnya. Kebutuhan slot pemain dibicarakan bersama panitia.</p>
-        <a class="btn btn--outline btn--sm" href="#sponsor">Lihat paket sponsor</a>
       </div>
     </div>
 
@@ -798,85 +774,7 @@ html{scroll-behavior:smooth}
   </div>
 </section>
 
-<section class="section section--mist" id="sponsor">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Sponsor &amp; mitra</span>
-      <h2>Dukung acara, dukung NTT</h2>
-      <p class="lede">Empat tingkat dukungan, masing-masing dengan logo di backdrop, umbul-umbul di sekitar Club House, tiket undangan, dan hak promosi produk di lokasi acara.</p>
-    </div>
-    <div class="tiers">
-      <div class="tier tier--title">
-        <span class="eyebrow">Sponsor utama</span>
-        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
-        <div class="tier__angka">
-          <div><b>30</b><span>umbul-umbul di Club House</span></div>
-          <div><b>12</b><span>tiket undangan</span></div>
-        </div>
-        <ul class="list">
-          <li>Logo di seluruh backdrop</li>
-          <li>Logo di banner panggung</li>
-          <li>Nama perusahaan diumumkan pembawa acara</li>
-          <li>Promosi produk, flyer, dan brosur perusahaan</li>
-        </ul>
-      </div>
-      <div class="tier">
-        <span class="eyebrow">Platinum</span>
-        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
-        <div class="tier__angka">
-          <div><b>25</b><span>umbul-umbul di Club House</span></div>
-          <div><b>8</b><span>tiket undangan</span></div>
-        </div>
-        <ul class="list">
-          <li>Logo di seluruh backdrop</li>
-          <li>Logo tayang di LED/videotron</li>
-          <li>Nama perusahaan diumumkan pembawa acara</li>
-          <li>Promosi produk, flyer, dan brosur perusahaan</li>
-        </ul>
-      </div>
-      <div class="tier">
-        <span class="eyebrow">Gold</span>
-        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
-        <div class="tier__angka">
-          <div><b>20</b><span>umbul-umbul di Club House</span></div>
-          <div><b>4</b><span>tiket undangan</span></div>
-        </div>
-        <ul class="list">
-          <li>Logo di seluruh backdrop</li>
-          <li>Logo tayang di LED/videotron</li>
-          <li>Nama perusahaan diumumkan pembawa acara</li>
-          <li>Promosi produk, flyer, dan brosur perusahaan</li>
-        </ul>
-      </div>
-      <div class="tier">
-        <span class="eyebrow">Silver</span>
-        <div class="tier__kontribusi">Kontribusi sesuai kesepakatan</div>
-        <div class="tier__angka">
-          <div><b>15</b><span>umbul-umbul di Club House</span></div>
-          <div><b>2</b><span>tiket undangan</span></div>
-        </div>
-        <ul class="list">
-          <li>Logo di seluruh backdrop</li>
-          <li>Logo tayang di LED/videotron</li>
-          <li>Nama perusahaan diumumkan pembawa acara</li>
-          <li>Promosi produk, flyer, dan brosur perusahaan</li>
-        </ul>
-      </div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:var(--spacing-16);align-items:center;margin-top:var(--spacing-24)">
-      <a class="btn btn--wa" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Kami%20tertarik%20menjadi%20sponsor.%0A%0ANama%20perusahaan%3A%0ANarahubung%3A%0ATingkat%20yang%20diminati%20%28Sponsor%20Utama/Platinum/Gold/Silver%29%3A%0A%0AMohon%20dikirimkan%20rincian%20paketnya.%20Terima%20kasih." target="_blank" rel="noopener">Hubungi panitia untuk sponsorship</a>
-      <span class="caption">Nilai kontribusi tiap tingkat ditetapkan bersama panitia. Kebutuhan slot pemain dibicarakan terpisah dari tiket undangan.</span>
-    </div>
-    <div class="logos" aria-label="Ruang untuk logo sponsor dan mitra">
-      <div class="logo-tile">Ruang logo sponsor</div>
-      <div class="logo-tile">Ruang logo sponsor</div>
-      <div class="logo-tile">Ruang logo sponsor</div>
-      <div class="logo-tile">Ruang logo sponsor</div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="daftar">
+<section class="section section--mist" id="daftar">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Pendaftaran</span>
@@ -896,12 +794,11 @@ html{scroll-behavior:smooth}
         <span class="eyebrow">Narahubung</span>
         <h3 id="waNama">Ovi — Panitia Akpol Golf Charity 2026</h3>
         <p class="lede" style="font-size:15px;margin-top:var(--spacing-8)" id="waNomor">+62 822-2166-0855</p>
-        <p class="caption" style="margin-top:var(--spacing-12)">Jam balas mengikuti jam kerja panitia. Untuk peserta internal dan sponsor, sebutkan kategorinya agar panitia mengarahkan ke tarif dan alokasi yang tepat.</p>
+        <p class="caption" style="margin-top:var(--spacing-12)">Jam balas mengikuti jam kerja panitia. Untuk peserta internal, sebutkan satuan atau angkatan agar panitia mengarahkan ke tarif dan alokasi yang tepat.</p>
       </div>
       <div class="wa-panel__kanan">
         <a class="btn btn--wa" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Saya%20ingin%20mendaftar%20sebagai%20peserta%20umum.%0A%0ANama%20lengkap%3A%0AInstansi/klub%3A%0AUkuran%20polo%20%28S/M/L/XL/XXL/XXXL%29%3A%0AHandicap%3A%0A%0AMohon%20informasi%20cara%20pembayarannya.%20Terima%20kasih." target="_blank" rel="noopener">Daftar sebagai peserta umum</a>
         <a class="btn btn--outline" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Saya%20ingin%20mendaftar%20sebagai%20peserta%20internal%20%28keluarga%20besar%20Akpol%29.%0A%0ANama%20lengkap%3A%0ASatuan/angkatan%3A%0AUkuran%20polo%20%28S/M/L/XL/XXL/XXXL%29%3A%0AHandicap%3A%0A%0AMohon%20informasi%20tarif%20dan%20cara%20pembayarannya.%20Terima%20kasih." target="_blank" rel="noopener">Peserta internal (keluarga besar Akpol)</a>
-        <a class="btn btn--outline" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Kami%20tertarik%20menjadi%20sponsor.%0A%0ANama%20perusahaan%3A%0ANarahubung%3A%0ATingkat%20yang%20diminati%20%28Sponsor%20Utama/Platinum/Gold/Silver%29%3A%0A%0AMohon%20dikirimkan%20rincian%20paketnya.%20Terima%20kasih." target="_blank" rel="noopener">Tanya paket sponsor</a>
       </div>
     </div>
 

@@ -384,6 +384,25 @@ footer{border-top:1px solid var(--color-mist-gray);padding-block:var(--spacing-4
 .foot{display:flex;flex-wrap:wrap;gap:var(--spacing-24);justify-content:space-between;align-items:flex-start}
 .foot__disc{font-size:var(--text-caption);color:var(--text-muted);line-height:1.6;max-width:60ch}
 
+/* ===== flyer ===== */
+.flyer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--spacing-48);
+  align-items:center;margin-top:var(--spacing-48)}
+@media (max-width:900px){.flyer{grid-template-columns:1fr;gap:var(--spacing-32)}}
+.flyer__bingkai{margin:0;border:1px solid var(--color-cloud-gray);border-radius:var(--radius-cards);
+  background:var(--color-paper-white);padding:var(--spacing-12);overflow:hidden;box-shadow:var(--shadow-sm)}
+.flyer__bingkai a{display:block}
+.flyer__bingkai img{display:block;width:100%;height:auto;border-radius:var(--radius-tags);
+  background:var(--color-paper-white)}
+.flyer__sisi{display:flex;flex-direction:column;gap:var(--spacing-24)}
+.flyer__poin{display:flex;flex-direction:column;gap:var(--spacing-12);margin:0;padding:0;list-style:none}
+.flyer__poin li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--spacing-16);
+  align-items:baseline;padding-bottom:var(--spacing-12);border-bottom:1px solid var(--color-mist-gray)}
+.flyer__poin li:last-child{border-bottom:0;padding-bottom:0}
+.flyer__k{font-size:var(--text-caption);color:var(--text-muted);letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;min-width:112px}
+.flyer__v{font-size:var(--text-body);font-weight:500;line-height:1.5}
+.flyer__aksi{display:flex;flex-wrap:wrap;gap:var(--spacing-12);align-items:center}
+
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -398,6 +417,7 @@ html{scroll-behavior:smooth}
         <span class="brand__text">Akpol Golf Charity<span>Swing for Hope, Drive for NTT</span></span>
       </a>
       <nav class="nav__links" aria-label="Navigasi utama">
+        <a href="#flyer">Flyer</a>
         <a href="#acara">Acara</a>
         <a href="#charity">Charity for NTT</a>
         <a href="#paket">Paket</a>
@@ -413,6 +433,7 @@ html{scroll-behavior:smooth}
       </div>
     </div>
     <div class="nav__panel" id="navPanel" data-open="false">
+      <a href="#flyer">Flyer resmi</a>
       <a href="#acara">Acara</a>
       <a href="#charity">Charity for NTT</a>
       <a href="#paket">Paket peserta</a>
@@ -473,6 +494,44 @@ html{scroll-behavior:smooth}
     </div>
   </div>
 </div>
+
+<section class="section section--mist" id="flyer">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Flyer resmi</span>
+      <h2>Poster acara</h2>
+      <p class="lede">Flyer resmi Akpol Golf Charity 2026. Silakan simpan gambarnya dan bagikan ke rekan, klub, atau instansi yang ingin ikut — semua pendaftaran diarahkan ke WhatsApp panitia.</p>
+    </div>
+
+    <div class="flyer">
+      <figure class="flyer__bingkai">
+        <a href="flyer.jpg" target="_blank" rel="noopener" aria-label="Buka flyer ukuran penuh di tab baru">
+        <img src="flyer.jpg" width="733" height="1100" loading="lazy"
+             alt="Flyer Akpol Golf Charity 2026 — Swing for Hope, Drive for NTT. Jumat 23 Oktober 2026 di Royal Golf Semarang, tee off 12.30 WIB, biaya pendaftaran Rp2.500.000, 18 hole, 120 peserta, goodie bag eksklusif, champions prize &amp; lucky draw, serta empat mobil hadiah hole in one: BYD Atto 1, Jaecoo J5, Wuling Air EV, dan Chery Q.">
+        </a>
+        <figcaption class="caption" style="margin-top:var(--spacing-8);text-align:center">Ketuk gambar untuk membuka ukuran penuh.</figcaption>
+      </figure>
+
+      <div class="flyer__sisi">
+        <ul class="flyer__poin">
+          <li><span class="flyer__k">Tanggal</span><span class="flyer__v">Jumat, 23 Oktober 2026</span></li>
+          <li><span class="flyer__k">Format</span><span class="flyer__v">18 hole · shotgun start · handicap 36</span></li>
+          <li><span class="flyer__k">Kuota</span><span class="flyer__v">120 peserta</span></li>
+          <li><span class="flyer__k">Biaya umum</span><span class="flyer__v">Rp2.500.000 per peserta</span></li>
+          <li><span class="flyer__k">Hole in one</span><span class="flyer__v">BYD Atto 1 · Jaecoo J5 · Wuling Air EV · Chery Q</span></li>
+          <li><span class="flyer__k">Pendaftaran</span><span class="flyer__v">Melalui WhatsApp panitia</span></li>
+        </ul>
+
+        <div class="flyer__aksi">
+          <a class="btn btn--wa" href="https://wa.me/6282221660855?text=Halo%20Panitia%20Akpol%20Golf%20Charity%202026.%20Saya%20melihat%20flyer%20acara%20dan%20ingin%20menanyakan%20pendaftaran.%0A%0ANama%20lengkap%3A%0AInstansi/klub%3A%0A%0ATerima%20kasih." target="_blank" rel="noopener">Tanya panitia via WhatsApp</a>
+          <a class="btn btn--outline" href="flyer.jpg" download="akpol-golf-charity-2026-flyer.jpg">Unduh flyer</a>
+        </div>
+
+        <p class="caption">Rincian lengkap tiap bagian ada di halaman ini: <a href="#paket">paket peserta</a>, <a href="#goodiebag">goodie bag</a>, <a href="#jadwal">jadwal &amp; lokasi</a>, dan <a href="#hadiah">hadiah &amp; lucky draw</a>. Jika ada perbedaan antara flyer dan keterangan di halaman ini, konfirmasikan ke panitia.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="acara">
   <div class="wrap">
